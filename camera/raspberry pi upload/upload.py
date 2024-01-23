@@ -25,7 +25,7 @@ dynamodb = boto3.resource('dynamodb',
 table = dynamodb.Table('upload_image_name')  # Replace with your actual DynamoDB table name
 
 # Directory containing the images
-data_file_folder = os.path.join(os.getcwd(), "images")
+data_file_folder = os.path.join(os.getcwd(), "images_new")
 
 for file in os.listdir(data_file_folder):
     if not file.startswith('~') and file.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.bmp')):

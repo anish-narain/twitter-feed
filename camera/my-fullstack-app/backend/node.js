@@ -18,23 +18,29 @@ const bucketUrl = "https://idkw.s3.eu-west-2.amazonaws.com";
 // Enable CORS for all routes
 app.use(cors());
 
-app.get('/images', async (req, res) => {
-  const params = {
-      TableName: tableName,
-  };
-
-  try {
-      const data = await dynamodb.scan(params).promise();
-      const sortedImages = data.Items.sort((b, a) => new Date(b.UploadTimestamp) - new Date(a.UploadTimestamp));
-      const imagesWithUrls = sortedImages.map(item => ({
-          ...item,
-          imageUrl: `${bucketUrl}/${item.FileName}`
-      }));
-      res.json(imagesWithUrls);
-  } catch (error) {
-      res.status(500).send(error.toString());
-  }
-});
+app.get('/images/:date', async (req, res) => {
+    const { date } = req.params; // Get the date from the URL parameter
+  
+    const params = {
+        TableName: tableName,
+        KeyConditionExpression: "UploadDate = :date", // Query for a specific date
+        ExpressionAttributeValues: {
+            ":date": date
+        }
+    };
+  
+    try {
+        const data = await dynamodb.query(params).promise();
+        const imagesWithUrls = data.Items.map(item => ({
+            ...item,
+            imageUrl: `${bucketUrl}/${item.FileName}`
+        }));
+        res.json(imagesWithUrls);
+    } catch (error) {
+        console.error('DynamoDB error:', error);
+        res.status(500).send(error.toString());
+    }
+  });
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
