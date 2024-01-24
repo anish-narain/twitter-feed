@@ -2,7 +2,7 @@ const express = require('express');
 const AWS = require('aws-sdk');
 const cors = require('cors'); // Import CORS module
 const app = express();
-const port = 3001;
+const port = 5000;
 
 // AWS configuration
 AWS.config.update({
