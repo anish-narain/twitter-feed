@@ -1,22 +1,48 @@
-import logo from "./logo.svg";
+import React, { useState, useEffect } from 'react';
 import "@aws-amplify/ui-react/styles.css";
 import {
   withAuthenticator,
   Button,
-  Heading,
   Image,
   View,
   Card,
 } from "@aws-amplify/ui-react";
+import DateSelector from './DateSelector'; // Ensure the path is correct
+
+
 
 function App({ signOut }) {
+  const [images, setImages] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(null);
+
+  useEffect(() => {
+    if (selectedDate) {
+      // You might want to use the proxy setup here instead of the direct localhost URL
+      fetch(`/images/${selectedDate}`)
+        .then(response => response.json())
+        .then(setImages)
+        .catch(console.error);
+    }
+  }, [selectedDate]);
+
+  const handleSelectDate = (date) => {
+    setSelectedDate(date);
+  };
+
   return (
     <View className="App">
       <Card>
-        <Image src={logo} className="App-logo" alt="logo" />
-        <Heading level={1}>We now have Auth!</Heading>
+        <Button onClick={signOut}>Sign Out</Button>
       </Card>
-      <Button onClick={signOut}>Sign Out</Button>
+      <DateSelector onSelectDate={handleSelectDate} />
+      <div>
+        {images.map(image => (
+          <div key={image.FileName}>
+            <img src={image.imageUrl} alt={image.FileName} />
+            <p>Uploaded on: {image.UploadTimestamp}</p>
+          </div>
+        ))}
+      </div>
     </View>
   );
 }
