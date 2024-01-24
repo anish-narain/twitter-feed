@@ -17,13 +17,13 @@ function App({ signOut }) {
 
   useEffect(() => {
     if (selectedDate) {
-      // You might want to use the proxy setup here instead of the direct localhost URL
-      fetch(`/images/${selectedDate}`)
+      fetch(`http://localhost:5001/images/${selectedDate}`)
         .then(response => response.json())
         .then(setImages)
         .catch(console.error);
     }
   }, [selectedDate]);
+  
 
   const handleSelectDate = (date) => {
     setSelectedDate(date);
