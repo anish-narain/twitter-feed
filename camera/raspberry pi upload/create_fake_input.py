@@ -6,9 +6,20 @@ from botocore.exceptions import ClientError
 from decimal import Decimal
 import os
 
+
+"""
+ # remember in raspberry pi root folder   .bashrc
+
+ add the following two lines
+ export AWS_ACCESS_KEY_ID=your_access_key_id_here
+    export AWS_SECRET_ACCESS_KEY=your_secret_access_key_here
+ 
+"""
+
+
 # AWS S3 setup
-access_key = "AKIATO4ZT6IXMKE6KWXZ"  # Replace with your actual access key
-access_secret = "sh4WMN8MbRKmGNE9O8/prTZqzT3W9mq/rxJ7S7bH"  # Replace with your actual secret key
+access_key = os.environ.get('AWS_ACCESS_KEY_ID')
+access_secret = os.environ.get('AWS_SECRET_ACCESS_KEY')
 region_name = 'us-east-1'
 
 client_s3 = boto3.client(
