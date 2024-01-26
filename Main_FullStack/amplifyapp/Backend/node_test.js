@@ -4,6 +4,9 @@ const cors = require('cors'); // Import CORS module
 const app = express();
 const port = 5001;
 
+
+// if running on ec2 instance, no need for Accesskey!!!
+// Verified that ec2 instance has the ability to receive info from dynamodb with full access
 // AWS configuration
 AWS.config.update({
     region: "us-east-1"
