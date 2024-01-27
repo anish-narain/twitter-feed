@@ -9,8 +9,7 @@ AWS.config.update({
 });
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
-const tableName = "Twitter_weight_table"; // Adjust the table name to match your DynamoDB table
-
+const tableName = "Twitter_weight_table";
 const bucketUrl = "https://idkw.s3.eu-west-2.amazonaws.com";
 
 app.use(cors());
@@ -35,14 +34,11 @@ app.get('/weights/:date', async (req, res) => {
             ImageUrl: item.BirdDetect ? `${bucketUrl}/${item.ImageFileName}` : null
         }));
 
-        // Print the data on the console
-        console.log('Retrieved Data:', weightsData);
-
-        // Send a success response to the client (optional)
-        res.send('Data retrieved successfully!');
+        // Send the retrieved data as JSON
+        res.json(weightsData);
     } catch (error) {
         console.error('DynamoDB error:', error);
-        res.status(500).send(error.toString());
+        res.status(500).json({ error: error.toString() });
     }
 });
 

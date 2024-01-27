@@ -1,65 +1,82 @@
-import React, { useEffect, useState } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
 
 function App() {
-  const [messages, setMessages] = useState([]);
-  const [socket, setSocket] = useState(null);
+  const [date, setDate] = useState('');
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
 
-  useEffect(() => {
-    // Connect to WebSocket server
-    const ws = new WebSocket('ws://3.85.198.193:3001');
+  const handleDateChange = (event) => {
+    setDate(event.target.value);
+  };
 
-    ws.onopen = () => {
-      console.log('Connected to WebSocket');
-      ws.send('Hello from React');
-    };
+  const fetchData = async () => {
+    try {
+      const response = await fetch(`http://3.85.198.193:5001/weights/${date}`);
+      const result = await response.json();
 
-    ws.onmessage = (event) => {
-      console.log('Message from server:', event.data);
-      setMessages(prev => [...prev, event.data]);
-    };
+      if (Array.isArray(result) && result.length > 0) {
+        // Log the retrieved data to the console
+        console.log('Retrieved Data:', result);
 
-    ws.onerror = (error) => {
-      console.error('WebSocket Error:', error);
-    };
+        // Set the array of entries in the state
+        setData(result);
 
-    setSocket(ws);
+        // Clear any previous errors
+        setError(null);
+      } else {
+        // Set an error message in the state if the data is not as expected
+        setError('No data found for the selected date.');
 
-    // Cleanup on unmount
-    return () => {
-      ws.close();
-    };
-  }, []);
+        // Clear the data state
+        setData([]);
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
 
-  const sendMessage = () => {
-    if (socket) {
-      socket.send('Hello again from React');
+      // Set an error message in the state
+      setError('Error fetching data. Please try again.');
+
+      // Clear the data state
+      setData([]);
     }
   };
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <button onClick={sendMessage}>Send Message</button>
+    <div>
+      <h1>Weight Viewer</h1>
+      <div>
+        <label>Select Date: </label>
+        <input type="date" value={date} onChange={handleDateChange} />
+        <button onClick={fetchData}>Fetch Data</button>
+      </div>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {data.length > 0 && (
         <div>
-          {messages.map((message, index) => (
-            <p key={index}>{message}</p>
-          ))}
+          <h2>Retrieved Data:</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Upload Timestamp</th>
+                <th>Bird Detect</th>
+                <th>Food Weight</th>
+                <th>Image</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((entry, index) => (
+                <tr key={index}>
+                  <td>{entry.UploadTimestamp}</td>
+                  <td>{entry.BirdDetect}</td>
+                  <td>{entry.FoodWeight}</td>
+                  <td>
+                    {entry.ImageUrl && <img src={entry.ImageUrl} alt={`Bird Image ${index}`} />}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      )}
     </div>
   );
 }
