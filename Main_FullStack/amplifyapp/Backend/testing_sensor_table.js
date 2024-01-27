@@ -36,6 +36,7 @@ app.get('/weights/:date', async (req, res) => {
 
         // Send the retrieved data as JSON
         res.json(weightsData);
+        console.log(`SENSOR JSON DATA SENT`);
     } catch (error) {
         console.error('DynamoDB error:', error);
         res.status(500).json({ error: error.toString() });
