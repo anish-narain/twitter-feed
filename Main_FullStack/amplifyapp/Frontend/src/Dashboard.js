@@ -1,6 +1,4 @@
-import React, { useState } from 'react'; // Import useState here
-import "@aws-amplify/ui-react/styles.css";
-import { withAuthenticator, Button } from "@aws-amplify/ui-react";
+import * as React from 'react';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
@@ -24,8 +22,6 @@ import Chart from './Chart';
 import Deposits from './Deposits';
 import Orders from './Orders';
 
-const drawerWidth = 240;
-
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -39,6 +35,7 @@ function Copyright(props) {
   );
 }
 
+const drawerWidth = 240;
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
@@ -84,10 +81,11 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-const defaultTheme = createTheme(); // Make sure this is correctly defined
 // TODO remove, this demo shouldn't need to reset the theme.
-function Dashboard({ signOut }) {
-  const [open, setOpen] = useState(true);
+const defaultTheme = createTheme();
+
+export default function Dashboard() {
+  const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -122,13 +120,12 @@ function Dashboard({ signOut }) {
               sx={{ flexGrow: 1 }}
             >
               Dashboard
-              </Typography>
-            <IconButton color="inherit" onClick={signOut}>
+            </Typography>
+            <IconButton color="inherit">
               <Badge badgeContent={4} color="secondary">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
-            <Button color="inherit" onClick={signOut}>Sign Out</Button>
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
@@ -206,5 +203,3 @@ function Dashboard({ signOut }) {
     </ThemeProvider>
   );
 }
-
-export default withAuthenticator(Dashboard);
