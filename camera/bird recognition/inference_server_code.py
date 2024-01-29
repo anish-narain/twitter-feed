@@ -12,12 +12,13 @@ import torch
 app = Flask(__name__)
 
 # DynamoDB setup
-dynamodb = boto3.resource('dynamodb', region_name='us-west-2')  # replace 'us-west-2' with your region
+dynamodb = boto3.resource('dynamodb', region_name='us-east-1')  # replace 'us-west-2' with your region
 table = dynamodb.Table('Twitter_Table_New')
 
 def handle_prediction(image_url, primary_key_value):
     # Function to handle prediction and storing results
     try:
+        print(f"Start processing image {image_url}")
         device=get_default_device()
 
         model = to_device(ResNet34(3,450), device)
@@ -30,15 +31,18 @@ def handle_prediction(image_url, primary_key_value):
         # Update the DynamoDB item
         response = table.update_item(
             Key={
-                'YourPrimaryKeyAttributeName': primary_key_value
+                'UploadDateTimeUnique ': primary_key_value
             },
             UpdateExpression="set BirdDetect=:l, Accuracy=:a",
             ExpressionAttributeValues={
                 ':l': label,
                 ':a': acc
             },
-            ReturnValues="UPDATED_NEW"
+            ReturnValues="UPDATED_NEW"        
         )
+
+        print(f"Label for image {image_url} is successfully uploaded to Table")
+
     except Exception as e:
         print(f"Error processing image: {e}")
 
