@@ -50,12 +50,17 @@ def worker():
     while True:
         # Get a task from the queue
         image_url, primary_key_value = task_queue.get()
+
+        # Print the approximate number of remaining tasks
+        print(f"Remaining tasks in queue: {task_queue.qsize()}")
+
         try:
             # Process the task
             handle_prediction(image_url, primary_key_value)
         finally:
             # Mark the task as done
             task_queue.task_done()
+
 
 # Start the worker thread
 threading.Thread(target=worker, daemon=True).start()
