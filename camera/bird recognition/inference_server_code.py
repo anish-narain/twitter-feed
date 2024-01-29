@@ -12,7 +12,7 @@ import torch
 app = Flask(__name__)
 
 # DynamoDB setup
-dynamodb = boto3.resource('dynamodb')
+dynamodb = boto3.resource('dynamodb', region_name='us-west-2')  # replace 'us-west-2' with your region
 table = dynamodb.Table('Twitter_Table_New')
 
 def handle_prediction(image_url, primary_key_value):
