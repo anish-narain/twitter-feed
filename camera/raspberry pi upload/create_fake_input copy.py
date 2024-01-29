@@ -36,7 +36,7 @@ dynamodb = boto3.resource('dynamodb',
     region_name=region_name
 )
 
-table = dynamodb.Table('Twitter_weight_table')  # Replace with your actual DynamoDB table name
+table = dynamodb.Table('Twitter_Table_New')  # Replace with your actual DynamoDB table name
 
 # Directory containing the images
 data_file_folder = os.path.join(os.getcwd(), "images_new")
@@ -72,6 +72,7 @@ while True:
     
     try:
         # Get current date in YYYY-MM-DD format and current timestamp in ISO 8601 format
+        current_date_time_unique = datetime.datetime.now().isoformat()
         current_date = datetime.datetime.now().strftime("%Y-%m-%d")
         current_timestamp = datetime.datetime.now().strftime('%H:%M:%S')
         if bird_detect:
@@ -88,6 +89,7 @@ while True:
         # Add entry to DynamoDB
         response = table.put_item(
             Item={
+                'UploadDateTimeUnique':current_date_time_unique,
                 'UploadDate': current_date,
                 'UploadTimestamp': current_timestamp,
                 'BirdDetect': bird_detect,
