@@ -3,6 +3,8 @@ import torch.nn.functional as F
 import torch
 import torchvision.transforms as transforms
 
+import requests
+from io import BytesIO
 import os 
 from PIL import Image
 #import matplotlib.pyplot as plt
@@ -88,6 +90,12 @@ def to_device(data, device):
         return [to_device(x, device) for x in data]
     return data.to(device, non_blocking=True)
 
+def open_image_from_url(url):
+    response = requests.get(url)
+    response.raise_for_status()  # This will raise an error if the download failed
+    return Image.open(BytesIO(response.content))
+
+
 device=get_default_device()
 stats = ((0.4758, 0.4685, 0.3870), (0.2376, 0.2282, 0.2475))
 
@@ -100,8 +108,9 @@ class BirdResnet(nn.Module):
     def forward(self, xb):
         return (self.network(xb))
     
-def predict_image(path, model):
-    im=Image.open(path)
+    
+def predict_image(url, model):
+    im = open_image_from_url(url)
     # resizing images then converting image to tensor, normalizing the tensors
     transform = transforms.Compose([transforms.Resize((250,250)),transforms.ToTensor(),transforms.Normalize(*stats,inplace=True)]) 
     img=transform(im)
