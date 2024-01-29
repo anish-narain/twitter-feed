@@ -31,9 +31,9 @@ def handle_prediction(image_url, primary_key_value):
         # Update the DynamoDB item
         response = table.update_item(
             Key={
-                'UploadDateTimeUnique ': primary_key_value
+                'UploadDateTimeUnique': primary_key_value
             },
-            UpdateExpression="set BirdDetect=:l, Accuracy=:a",
+            UpdateExpression="set BirdLabel=:l, Accuracy=:a",
             ExpressionAttributeValues={
                 ':l': label,
                 ':a': acc
