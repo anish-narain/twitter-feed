@@ -52,7 +52,7 @@ def worker():
         image_url, primary_key_value = task_queue.get()
 
         # Print the approximate number of remaining tasks
-        print(f"Starting processing a new request: Remaining tasks in queue: {task_queue.qsize()+1}")
+        print(f"Starting processing a new request: Remaining tasks in queue: {task_queue.qsize()}")
 
         try:
             # Process the task
@@ -77,7 +77,7 @@ def predict():
     # Add the task to the queue
     task_queue.put((image_url, primary_key_value))
     # Print the approximate number of remaining tasks
-    print(f"Recieved a new prediction request: Remaining tasks in queue: {task_queue.qsize()+1}")
+    print(f"Recieved a new prediction request: Remaining tasks in queue: {task_queue.qsize()}")
 
     return "Prediction task queued", 202
 
