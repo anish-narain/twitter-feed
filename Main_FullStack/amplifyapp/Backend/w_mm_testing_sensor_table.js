@@ -1,6 +1,8 @@
 const express = require('express');
 const AWS = require('aws-sdk');
 const cors = require('cors'); // Import CORS module
+const bodyParser = require('body-parser');
+
 const app = express();
 const port = 5001;
 
@@ -19,6 +21,7 @@ const bucketUrl = `https://${bucketName}.s3.amazonaws.com`;  // S3 bucket URL
 
 // Enable CORS for all routes
 app.use(cors());
+app.use(bodyParser.json({ limit: '50mb' }));
 app.use(express.json()); // Parse JSON requests
 
 app.post('/upload', async (req, res) => {
