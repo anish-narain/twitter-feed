@@ -2,6 +2,7 @@ import os
 import requests
 import json
 import datetime
+import base64
 
 # Directory containing the images
 data_file_folder = os.path.join(os.getcwd(), "images_new")
@@ -16,12 +17,16 @@ for file in os.listdir(data_file_folder):
             current_date = datetime.datetime.now().strftime("%Y-%m-%d")
             current_timestamp = datetime.datetime.now().isoformat()
 
+            # Read binary data from the file and encode it in Base64
+            with open(file_path, 'rb') as file_content:
+                encoded_content = base64.b64encode(file_content.read()).decode('utf-8')
+
             # Prepare data for the HTTP request
             payload = {
                 'fileName': file,
                 'uploadDate': current_date,
                 'uploadTimestamp': current_timestamp,
-                'fileContent': open(file_path, 'rb').read()
+                'fileContent': encoded_content
             }
 
             # Make a POST request to the Node.js server
