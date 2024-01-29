@@ -11,7 +11,6 @@ AWS.config.update({
     region: "us-east-1"
 });
 
-
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 const tableName = "Twitter_weight_table";
 const bucketName = "idkw";  // Replace with your actual bucket name
@@ -19,6 +18,7 @@ const bucketUrl = `https://${bucketName}.s3.amazonaws.com`;  // S3 bucket URL
 
 // Enable CORS for all routes
 app.use(cors());
+app.use(express.json()); // Parse JSON requests
 
 app.post('/upload', async (req, res) => {
     try {
@@ -26,7 +26,7 @@ app.post('/upload', async (req, res) => {
 
         // Upload file to S3
         const s3Params = {
-            Bucket: 'your-s3-bucket-name',
+            Bucket: bucketName,
             Key: fileName,
             Body: Buffer.from(fileContent, 'base64'), // Assuming the content is base64 encoded
         };
