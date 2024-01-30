@@ -9,3 +9,13 @@
 * A rough display is made in react to display the images according to timestamp order
 
 A rough pipeline made - 01/21/24 (tired)
+
+
+## Bird prediction part:
+server code: run `inference_server_code_queue.py` on ec2 instance with `bird_model_copy.py` a must dependency.
+
+client code: `create_fake_input_with_prediction.py` which uploads images from folder `images` and call the server code to make predictions
+
+Bird detection based on inference on Resnet model created by: https://github.com/Moddy2024/Bird-Classification/tree/main
+
+Bird prediction pipeline roughly finished - 01/29/24 
