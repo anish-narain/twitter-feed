@@ -21,8 +21,9 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { mainListItems, secondaryListItems } from './listItems';
 import Chart from './Chart';
-import Deposits from './Deposits';
-import Orders from './Orders';
+import Visits from './Visits';
+import BirdHistory from './BirdHistory';
+import FlutterDashIcon from '@mui/icons-material/FlutterDash';
 
 const drawerWidth = 240;
 
@@ -121,12 +122,10 @@ function Dashboard({ signOut }) {
               noWrap
               sx={{ flexGrow: 1 }}
             >
-              Dashboard
+              Twitter Feed 
+              <FlutterDashIcon />
               </Typography>
             <IconButton color="inherit" onClick={signOut}>
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge>
             </IconButton>
             <Button color="inherit" onClick={signOut}>Sign Out</Button>
           </Toolbar>
@@ -189,13 +188,13 @@ function Dashboard({ signOut }) {
                     height: 240,
                   }}
                 >
-                  <Deposits />
+                  <Visits />
                 </Paper>
               </Grid>
-              {/* Recent Orders */}
+              {/* Recent BirdHistory */}
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                  <Orders />
+                  <BirdHistory />
                 </Paper>
               </Grid>
             </Grid>

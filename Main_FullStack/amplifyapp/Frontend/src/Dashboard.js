@@ -27,7 +27,7 @@ function Copyright(props) {
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
       <Link color="inherit" href="https://mui.com/">
-        Your Website
+        Twitter
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -119,7 +119,7 @@ export default function Dashboard() {
               noWrap
               sx={{ flexGrow: 1 }}
             >
-              Dashboard
+              Twitter
             </Typography>
             <IconButton color="inherit">
               <Badge badgeContent={4} color="secondary">
