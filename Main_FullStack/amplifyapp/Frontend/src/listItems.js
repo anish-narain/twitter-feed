@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
@@ -8,21 +9,22 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
 
 
+
 export const ListItems = (
   <React.Fragment>
-    <ListItemButton>
+    <ListItemButton component={Link} to="/App">
       <ListItemIcon>
         <DashboardIcon />
       </ListItemIcon>
       <ListItemText primary="Dashboard" />
     </ListItemButton>
-    <ListItemButton>
+    <ListItemButton component={Link} to="/BirdTrendsPage">
       <ListItemIcon>
-      <BarChartIcon />
+        <BarChartIcon />
       </ListItemIcon>
       <ListItemText primary="Bird Trends" />
     </ListItemButton>
-    <ListItemButton>
+    <ListItemButton component={Link} to="/FoodAlertsPage">
       <ListItemIcon>
         <RestaurantIcon />
       </ListItemIcon>
@@ -30,6 +32,7 @@ export const ListItems = (
     </ListItemButton>
   </React.Fragment>
 );
+
 
 export const SecondaryListItems = (
   <React.Fragment>
