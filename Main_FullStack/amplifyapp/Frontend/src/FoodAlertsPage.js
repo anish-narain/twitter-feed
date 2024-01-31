@@ -20,7 +20,7 @@ import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import {ListItems, SecondaryListItems } from './listItems';
+import { ListItems, SecondaryListItems } from './listItems';
 import Chart from './Chart';
 import Visits from './Visits';
 import BirdHistory from './BirdHistory';
@@ -125,10 +125,11 @@ function Dashboard({ signOut }) {
               noWrap
               sx={{ flexGrow: 1 }}
             >
-              Twitter Feed
+              Twitter Feed 
               <FlutterDashIcon />
-            </Typography>
-            <IconButton color="inherit" onClick={signOut}></IconButton>
+              </Typography>
+            <IconButton color="inherit" onClick={signOut}>
+            </IconButton>
             <Button color="inherit" onClick={signOut}>Sign Out</Button>
           </Toolbar>
         </AppBar>
@@ -200,29 +201,12 @@ function Dashboard({ signOut }) {
                 </Paper>
               </Grid>
             </Grid>
-            <Router>
-              {/* Setup your Routes here */}
-              <Routes>
-                <Route path="/bird-trends" element={<BirdTrendsPage />} />
-                <Route path="/food-alerts" element={<FoodAlertsPage />} />
-                {/* Add more routes as needed */}
-              </Routes>
-            </Router>
-          </Container>
-          <Toolbar />
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Router>
-              {/* Setup your Routes here */}
-              <Routes>
-                <Route path="/bird-trends" element={<BirdTrendsPage />} />
-                <Route path="/food-alerts" element={<FoodAlertsPage />} />
-                {/* Add more routes as needed */}
-              </Routes>
-            </Router>
+            <Copyright sx={{ pt: 4 }} />
           </Container>
         </Box>
       </Box>
     </ThemeProvider>
   );
 }
- export default withAuthenticator(Dashboard);
+
+export default withAuthenticator(Dashboard);

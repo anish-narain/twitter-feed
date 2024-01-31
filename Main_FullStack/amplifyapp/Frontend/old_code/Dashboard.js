@@ -1,7 +1,4 @@
-import React, { useState } from 'react'; // Import useState here
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import "@aws-amplify/ui-react/styles.css";
-import { withAuthenticator, Button } from "@aws-amplify/ui-react";
+import * as React from 'react';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
@@ -20,22 +17,17 @@ import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import {ListItems, SecondaryListItems } from './listItems';
+import { mainListItems, secondaryListItems } from './listItems';
 import Chart from './Chart';
 import Visits from './Visits';
-import BirdHistory from './BirdHistory';
-import BirdTrendsPage from './BirdTrendsPage'; // Replace with actual file name
-import FoodAlertsPage from './FoodAlertsPage'; // Replace with actual file name
-import FlutterDashIcon from '@mui/icons-material/FlutterDash';
-
-const drawerWidth = 240;
+import Orders from './Orders';
 
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
       <Link color="inherit" href="https://mui.com/">
-        Your Website
+        Twitter
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -43,6 +35,7 @@ function Copyright(props) {
   );
 }
 
+const drawerWidth = 240;
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
@@ -88,10 +81,11 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-const defaultTheme = createTheme(); // Make sure this is correctly defined
 // TODO remove, this demo shouldn't need to reset the theme.
-function Dashboard({ signOut }) {
-  const [open, setOpen] = useState(true);
+const defaultTheme = createTheme();
+
+export default function Dashboard() {
+  const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -125,11 +119,13 @@ function Dashboard({ signOut }) {
               noWrap
               sx={{ flexGrow: 1 }}
             >
-              Twitter Feed
-              <FlutterDashIcon />
+              Twitter
             </Typography>
-            <IconButton color="inherit" onClick={signOut}></IconButton>
-            <Button color="inherit" onClick={signOut}>Sign Out</Button>
+            <IconButton color="inherit">
+              <Badge badgeContent={4} color="secondary">
+                <NotificationsIcon />
+              </Badge>
+            </IconButton>
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
@@ -147,9 +143,9 @@ function Dashboard({ signOut }) {
           </Toolbar>
           <Divider />
           <List component="nav">
-            {ListItems}
+            {mainListItems}
             <Divider sx={{ my: 1 }} />
-            {SecondaryListItems}
+            {secondaryListItems}
           </List>
         </Drawer>
         <Box
@@ -193,36 +189,17 @@ function Dashboard({ signOut }) {
                   <Visits />
                 </Paper>
               </Grid>
-              {/* Recent BirdHistory */}
+              {/* Recent Orders */}
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                  <BirdHistory />
+                  <Orders />
                 </Paper>
               </Grid>
             </Grid>
-            <Router>
-              {/* Setup your Routes here */}
-              <Routes>
-                <Route path="/bird-trends" element={<BirdTrendsPage />} />
-                <Route path="/food-alerts" element={<FoodAlertsPage />} />
-                {/* Add more routes as needed */}
-              </Routes>
-            </Router>
-          </Container>
-          <Toolbar />
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Router>
-              {/* Setup your Routes here */}
-              <Routes>
-                <Route path="/bird-trends" element={<BirdTrendsPage />} />
-                <Route path="/food-alerts" element={<FoodAlertsPage />} />
-                {/* Add more routes as needed */}
-              </Routes>
-            </Router>
+            <Copyright sx={{ pt: 4 }} />
           </Container>
         </Box>
       </Box>
     </ThemeProvider>
   );
 }
- export default withAuthenticator(Dashboard);

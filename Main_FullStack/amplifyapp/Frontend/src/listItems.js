@@ -8,7 +8,7 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
 
 
-export const mainListItems = (
+export const ListItems = (
   <React.Fragment>
     <ListItemButton>
       <ListItemIcon>
@@ -31,7 +31,7 @@ export const mainListItems = (
   </React.Fragment>
 );
 
-export const secondaryListItems = (
+export const SecondaryListItems = (
   <React.Fragment>
   </React.Fragment>
 );

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import Title from './Title';
 
@@ -8,20 +7,19 @@ function preventDefault(event) {
 }
 
 export default function Deposits() {
+
+  const currentDateOptions = { day: 'numeric', month: 'long', year: 'numeric' };
+  const currentDate = new Date().toLocaleDateString(undefined, currentDateOptions);
+
   return (
     <React.Fragment>
-      <Title>Number of Times Birds Were Detected</Title>
+      <Title>Number of Bird Detections</Title>
       <Typography component="p" variant="h4">
         5
       </Typography>
       <Typography color="text.secondary" sx={{ flex: 1 }}>
-        on 15 March, 2019
+        on {currentDate}
       </Typography>
-      <div>
-        <Link color="primary" href="#" onClick={preventDefault}>
-          View balance
-        </Link>
-      </div>
     </React.Fragment>
   );
 }

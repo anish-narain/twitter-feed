@@ -46,7 +46,7 @@ export default function Chart() {
           ]}
           yAxis={[
             {
-              label: 'Birds detections',
+              label: 'Bird Detections',
               labelStyle: {
                 ...theme.typography.body1,
                 fill: theme.palette.text.primary,

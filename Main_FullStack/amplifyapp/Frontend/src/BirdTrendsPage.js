@@ -1,4 +1,7 @@
-import * as React from 'react';
+import React, { useState } from 'react'; // Import useState here
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import "@aws-amplify/ui-react/styles.css";
+import { withAuthenticator, Button } from "@aws-amplify/ui-react";
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
@@ -17,17 +20,22 @@ import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { mainListItems, secondaryListItems } from './listItems';
+import {ListItems, SecondaryListItems } from './listItems';
 import Chart from './Chart';
-import Deposits from './Deposits';
-import Orders from './Orders';
+import Visits from './Visits';
+import BirdHistory from './BirdHistory';
+import BirdTrendsPage from './BirdTrendsPage'; // Replace with actual file name
+import FoodAlertsPage from './FoodAlertsPage'; // Replace with actual file name
+import FlutterDashIcon from '@mui/icons-material/FlutterDash';
+
+const drawerWidth = 240;
 
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
       <Link color="inherit" href="https://mui.com/">
-        Twitter
+        Your Website
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -35,7 +43,6 @@ function Copyright(props) {
   );
 }
 
-const drawerWidth = 240;
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
@@ -81,11 +88,10 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
+const defaultTheme = createTheme(); // Make sure this is correctly defined
 // TODO remove, this demo shouldn't need to reset the theme.
-const defaultTheme = createTheme();
-
-export default function Dashboard() {
-  const [open, setOpen] = React.useState(true);
+function Dashboard({ signOut }) {
+  const [open, setOpen] = useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -119,13 +125,12 @@ export default function Dashboard() {
               noWrap
               sx={{ flexGrow: 1 }}
             >
-              Twitter
-            </Typography>
-            <IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge>
+              Twitter Feed 
+              <FlutterDashIcon />
+              </Typography>
+            <IconButton color="inherit" onClick={signOut}>
             </IconButton>
+            <Button color="inherit" onClick={signOut}>Sign Out</Button>
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
@@ -143,9 +148,9 @@ export default function Dashboard() {
           </Toolbar>
           <Divider />
           <List component="nav">
-            {mainListItems}
+            {ListItems}
             <Divider sx={{ my: 1 }} />
-            {secondaryListItems}
+            {SecondaryListItems}
           </List>
         </Drawer>
         <Box
@@ -186,13 +191,13 @@ export default function Dashboard() {
                     height: 240,
                   }}
                 >
-                  <Deposits />
+                  <Visits />
                 </Paper>
               </Grid>
-              {/* Recent Orders */}
+              {/* Recent BirdHistory */}
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                  <Orders />
+                  <BirdHistory />
                 </Paper>
               </Grid>
             </Grid>
@@ -203,3 +208,5 @@ export default function Dashboard() {
     </ThemeProvider>
   );
 }
+
+export default withAuthenticator(Dashboard);
