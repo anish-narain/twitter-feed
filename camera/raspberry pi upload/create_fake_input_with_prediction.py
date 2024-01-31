@@ -76,7 +76,7 @@ while True:
     weight_food = round(Decimal(random.uniform(20.0, 700.0)),5)   # random food weight from 20.0g to 700.0g
 
     if weight_bird > 80:
-        bird_detect = True
+        bird_detect = Decimal(1)
 
         '''
         call camera to capture a picture and save it into folder data_file_folder
@@ -86,7 +86,7 @@ while True:
         
    
     else:
-        bird_detect = False
+        bird_detect = Decimal(0)
 
     print("Bird's weight:", weight_bird)
     print(f"Bird_detect: {bird_detect}")
@@ -116,7 +116,7 @@ while True:
         # upload image to s3 bucket
         # predetemined 
         if bird_detect:
-            image_file_name = '1.jpg'
+            image_file_name = '2.jpg'
             file_path = os.path.join(data_file_folder, image_file_name)
 
             print(f"Uploading file {image_file_name} ....")

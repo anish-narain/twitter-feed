@@ -24,27 +24,43 @@ def handle_prediction(image_url, primary_key_value):
         print(f"Start processing image {image_url}")
         device = get_default_device()
 
-        model = to_device(ResNet34(3,450), device)
+        model = to_device(ResNet34(3, 450), device)
         model = BirdResnet(model)
         model.load_state_dict(torch.load('bird-resnet34best.pth', map_location=torch.device(device)))
 
         label, acc = predict_image(image_url, model)
+
+        # Determine if BirdDetect should be updated to 1
+        # Threshold is here 95% -------------------------------------------------------------------------------
+        bird_detect_update = 1 if acc > 95 else 0
+
+        acc = str(acc)
+
+        # Prepare update expressions
+        update_expression = "set BirdLabel=:l, Accuracy=:a"
+        expression_attribute_values = {
+            ':l': label,
+            ':a': acc
+        }
+
+        # If accuracy is above 95%, add BirdDetect to the update
+        if bird_detect_update:
+            update_expression += ", BirdDetect=:b"
+            expression_attribute_values[':b'] = bird_detect_update
 
         # Store results in DynamoDB
         response = table.update_item(
             Key={
                 'UploadDateTimeUnique': primary_key_value
             },
-            UpdateExpression="set BirdLabel=:l, Accuracy=:a",
-            ExpressionAttributeValues={
-                ':l': label,
-                ':a': acc
-            },
+            UpdateExpression=update_expression,
+            ExpressionAttributeValues=expression_attribute_values,
             ReturnValues="UPDATED_NEW"        
         )
         print(f"Label for image {image_url} is successfully uploaded to Table")
     except Exception as e:
         print(f"Error processing image: {e}")
+
 
 def worker():
     while True:
