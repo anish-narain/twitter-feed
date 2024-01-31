@@ -31,8 +31,8 @@ function App() {
       </div>
       <div className="image-list">
         {images.map(image => (
-          <div key={image.FileName} className="image-item">
-            <img src={image.imageUrl} alt={image.FileName} className="image" />
+          <div key={image.ImageFileName} className="image-item">
+            <img src={image.imageUrl} alt={image.ImageFileName} className="image" />
             <p className="image-info">Uploaded on: {image.UploadTimestamp}</p>
           </div>
         ))}
