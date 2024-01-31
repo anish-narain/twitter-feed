@@ -22,7 +22,7 @@ import requests
 # AWS S3 setup
 access_key = "AKIATO4ZT6IXMKE6KWXZ"  # Replace with your actual access key
 access_secret = "sh4WMN8MbRKmGNE9O8/prTZqzT3W9mq/rxJ7S7bH"  # Replace with your actual secret key
-bucket_name = "idkw"  # Replace with your actual bucket name
+bucket_name = "twitterbirdbucket"  # Replace with your actual bucket name
 region_name = 'us-east-1'
 
 client_s3 = boto3.client(
@@ -62,7 +62,7 @@ def send_prediction_request(server_url, image_url, primary_key_value):
 
 # Example usage
 server_url = 'http://18.209.102.29:5000'  # Replace with your server's IP and port
-image_url = 'https://idkw.s3.eu-west-2.amazonaws.com'  # Replace with your image URL
+image_url = 'https://twitterbirdbucket.s3.amazonaws.com'  # Replace with your image URL
 primary_key_value = '2024-01-29T21:25:06.837403'  # Replace with the appropriate primary key value
 
 
@@ -116,7 +116,7 @@ while True:
         # upload image to s3 bucket
         # predetemined 
         if bird_detect:
-            image_file_name = '2.jpg'
+            image_file_name = '1.jpg'
             file_path = os.path.join(data_file_folder, image_file_name)
 
             print(f"Uploading file {image_file_name} ....")

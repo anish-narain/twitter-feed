@@ -16,7 +16,7 @@ AWS.config.update({
 const s3 = new AWS.S3();
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 const tableName = "Twitter_weight_table";
-const bucketName = "idkw";  // Replace with your actual bucket name
+const bucketName = "twitterbirdbucket";  // Replace with your actual bucket name
 const bucketUrl = `https://${bucketName}.s3.amazonaws.com`;  // S3 bucket URL
 
 // Enable CORS for all routes

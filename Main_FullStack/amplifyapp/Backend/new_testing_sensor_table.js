@@ -12,7 +12,7 @@ AWS.config.update({
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 const tableName = "Twitter_Table_New";
-const bucketUrl = "https://idkw.s3.eu-west-2.amazonaws.com";
+const bucketUrl = "https://twitterbirdbucket.s3.amazonaws.com";
 
 app.use(cors());
 

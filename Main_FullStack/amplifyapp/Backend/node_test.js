@@ -14,7 +14,7 @@ AWS.config.update({
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 const tableName = "upload_image_name";
-const bucketUrl = "https://idkw.s3.eu-west-2.amazonaws.com";
+const bucketUrl = "https://twitterbirdbucket.s3.amazonaws.com";
 
 // Enable CORS for all routes
 app.use(cors());

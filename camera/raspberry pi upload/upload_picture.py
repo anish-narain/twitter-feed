@@ -6,7 +6,7 @@ import datetime
 # AWS S3 setup
 access_key = "AKIATO4ZT6IXMKE6KWXZ"  # Replace with your actual access key
 access_secret = "sh4WMN8MbRKmGNE9O8/prTZqzT3W9mq/rxJ7S7bH"  # Replace with your actual secret key
-bucket_name = "idkw"  # Replace with your actual bucket name
+bucket_name = "twitterbirdbucket"  # Replace with your actual bucket name
 region_name = 'us-east-1'
 
 client_s3 = boto3.client(
@@ -25,7 +25,7 @@ dynamodb = boto3.resource('dynamodb',
 table = dynamodb.Table('upload_image_name')  # Replace with your actual DynamoDB table name
 
 # Directory containing the images
-data_file_folder = os.path.join(os.getcwd(), "images_new")
+data_file_folder = os.path.join(os.getcwd(), "images")
 
 for file in os.listdir(data_file_folder):
     if not file.startswith('~') and file.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.bmp')):
