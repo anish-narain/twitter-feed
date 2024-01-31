@@ -34,6 +34,7 @@ app.get('/images/:date', async (req, res) => {
             imageUrl: item.BirdDetect && item.ImageFileName ? `${bucketUrl}/${item.ImageFileName}` : null
         }));
         res.json(imagesWithUrls);
+        console.log(`IMAGE SENT FOR DATE: ${date}`);
     } catch (error) {
         console.error('DynamoDB error:', error);
         res.status(500).send(error.toString());
