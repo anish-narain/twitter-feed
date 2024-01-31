@@ -11,7 +11,7 @@ function App() {
 
   const fetchData = async () => {
     try {
-      const response = await fetch(`http://localhost:5001/weights/${date}`);
+      const response = await fetch(`http://localhost:5001/data/${date}`);
       const result = await response.json();
 
       if (Array.isArray(result) && result.length > 0) {
