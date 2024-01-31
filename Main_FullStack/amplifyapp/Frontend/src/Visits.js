@@ -1,15 +1,14 @@
-import * as React from 'react';
+import React from 'react';
 import Typography from '@mui/material/Typography';
 import Title from './Title';
+import { useSelectedDate } from './SelectedDateContext'; // Import the context hook
 
-function preventDefault(event) {
-  event.preventDefault();
-}
-
-export default function Deposits() {
+export default function Visits() {
+  const { selectedDate } = useSelectedDate(); // Use the selected date from context
 
   const currentDateOptions = { day: 'numeric', month: 'long', year: 'numeric' };
-  const currentDate = new Date().toLocaleDateString(undefined, currentDateOptions);
+  // Use selectedDate or default to current date if null
+  const currentDate = selectedDate ? new Date(selectedDate).toLocaleDateString(undefined, currentDateOptions) : new Date().toLocaleDateString(undefined, currentDateOptions);
 
   return (
     <React.Fragment>

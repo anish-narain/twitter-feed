@@ -26,7 +26,7 @@ import BirdTrendsPage from './BirdTrendsPage'; // Replace with actual file name
 import FoodAlertsPage from './FoodAlertsPage'; // Replace with actual file name
 import Dashboard from './Dashboard'; // Replace with actual file name
 import FlutterDashIcon from '@mui/icons-material/FlutterDash';
-
+import { SelectedDateProvider } from './SelectedDateContext'; // Import the provider
 
 const drawerWidth = 240;
 
@@ -90,4 +90,10 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const defaultTheme = createTheme();
 
 
- export default withAuthenticator(Dashboard);
+export default withAuthenticator(function App() {
+  return (
+    <SelectedDateProvider>
+      <Dashboard />
+    </SelectedDateProvider>
+  );
+});

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import "@aws-amplify/ui-react/styles.css";
 import { withAuthenticator, View, Card } from "@aws-amplify/ui-react";
+import { useSelectedDate } from './SelectedDateContext'; // Import the context hook
 import DateSelector from './DateSelector'; // Ensure the path is correct
 import './App.css'; // Ensure you have this CSS file
 
 function App() {
   const [images, setImages] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(null);
+  const { selectedDate, setSelectedDate } = useSelectedDate(); // Use context for date
 
   useEffect(() => {
     let isEffectActive = true;
