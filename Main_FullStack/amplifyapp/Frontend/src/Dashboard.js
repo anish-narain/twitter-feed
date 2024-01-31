@@ -25,6 +25,8 @@ import BirdHistory from './BirdHistory';
 import BirdTrendsPage from './BirdTrendsPage'; // Replace with actual file name
 import FoodAlertsPage from './FoodAlertsPage'; // Replace with actual file name
 import FlutterDashIcon from '@mui/icons-material/FlutterDash';
+import ConditionalComponents from './ConditionalComponents'; // Import the new component
+
 
 
 const drawerWidth = 240;
@@ -177,37 +179,7 @@ function Dashboard({ signOut }) {
           >
             <Toolbar />
             <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-              <Grid container spacing={3}>
-                <Grid item xs={12} md={8} lg={9}>
-                  <Paper
-                    sx={{
-                      p: 2,
-                      display: 'flex',
-                      flexDirection: 'column',
-                      height: 240,
-                    }}
-                  >
-                    <Chart />
-                  </Paper>
-                </Grid>
-                <Grid item xs={12} md={4} lg={3}>
-                  <Paper
-                    sx={{
-                      p: 2,
-                      display: 'flex',
-                      flexDirection: 'column',
-                      height: 240,
-                    }}
-                  >
-                    <Visits />
-                  </Paper>
-                </Grid>
-                <Grid item xs={12}>
-                  <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                    <BirdHistory />
-                  </Paper>
-                </Grid>
-              </Grid>
+              <ConditionalComponents /> {/* Use the new component here */}
               <Routes>
                 <Route path="/BirdTrendsPage" element={<BirdTrendsPage />} />
                 <Route path="/FoodAlertsPage" element={<FoodAlertsPage />} />
