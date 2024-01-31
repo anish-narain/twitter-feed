@@ -31,7 +31,7 @@ app.get('/images/:date', async (req, res) => {
         const data = await dynamodb.scan(params).promise();
         const imagesWithUrls = data.Items.map(item => ({
             ...item,
-            imageUrl: item.BirdDetect && item.ImageFileName ? `${bucketUrl}/${item.ImageFileName}` : null
+            ImageUrl: item.BirdDetect && item.ImageFileName ? `${bucketUrl}/${item.ImageFileName}` : null
         }));
         res.json(imagesWithUrls);
         console.log(`IMAGE SENT FOR DATE: ${date}`);

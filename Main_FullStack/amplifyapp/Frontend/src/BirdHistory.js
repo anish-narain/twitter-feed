@@ -9,12 +9,40 @@ function App() {
   const [selectedDate, setSelectedDate] = useState(null);
 
   useEffect(() => {
+    let isEffectActive = true;
+  
+    const fetchImages = async () => {
+      // Immediately clear the images for the new date selection
+      setImages(prevImages => {
+        if (prevImages.length > 0) {
+          return [];
+        }
+        return prevImages;
+      });
+  
+      try {
+        const response = await fetch(`http://localhost:5001/images/${selectedDate}`);
+        const data = await response.json();
+        if (isEffectActive) {
+          // Filter and set images only if the response is not null
+          setImages(data.filter(image => image.ImageUrl !== null));
+        }
+      } catch (error) {
+        console.error(error);
+        if (isEffectActive) {
+          setImages([]);
+        }
+      }
+    };
+  
     if (selectedDate) {
-      fetch(`http://localhost:5001/images/${selectedDate}`)
-        .then(response => response.json())
-        .then(setImages)
-        .catch(console.error);
+      fetchImages();
     }
+  
+    // Cleanup function to set the effect as inactive
+    return () => {
+      isEffectActive = false;
+    };
   }, [selectedDate]);
 
   const handleSelectDate = (date) => {
@@ -25,17 +53,17 @@ function App() {
     <View className="App">
       <div className="header">
         <Card>
-          {/* Sign out button removed */}
+          {/* Card content here */}
         </Card>
         <DateSelector onSelectDate={handleSelectDate} />
       </div>
       <div className="image-list">
-        {images.map(image => (
-          image.imageUrl && (
-          <div key={image.ImageFileName} className="image-item">
-            <img src={image.imageUrl} alt={image.ImageFileName} className="image" />
-            <p className="image-info">Uploaded on: {image.UploadTimestamp}</p>
-          </div>
+        {images.map((image, index) => (
+          image.ImageUrl && (
+            <div key={selectedDate + index} className="image-item">
+              <img src={image.ImageUrl} alt={image.ImageFileName} className="image" />
+              <p className="image-info">Uploaded on: {image.UploadTimestamp}</p>
+            </div>
           )
         ))}
       </div>
