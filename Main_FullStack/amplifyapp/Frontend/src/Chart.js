@@ -14,7 +14,7 @@ export default function Chart() {
 
   const currentDateOptions = { day: 'numeric', month: 'long', year: 'numeric' };
   // Use selectedDate or default to current date if null
-  //const currentDate = selectedDate ? new Date(selectedDate).toLocaleDateString(undefined, currentDateOptions) : new Date().toLocaleDateString(undefined, currentDateOptions);
+  const currentDate = selectedDate ? new Date(selectedDate).toLocaleDateString(undefined, currentDateOptions) : new Date().toLocaleDateString(undefined, currentDateOptions);
   const QueryDate = selectedDate 
     ? new Date(selectedDate).toISOString().split('T')[0] 
     : new Date().toISOString().split('T')[0];
@@ -53,7 +53,7 @@ export default function Chart() {
 
   return (
     <React.Fragment>
-      <Title>Today</Title>
+      <Title>{currentDate}</Title>
       <div style={{ width: '100%', flexGrow: 1, overflow: 'hidden' }}>
         <BarChart
           dataset={data}

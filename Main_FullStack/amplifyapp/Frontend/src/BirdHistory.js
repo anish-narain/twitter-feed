@@ -9,6 +9,10 @@ function App() {
   const [images, setImages] = useState([]);
   const { selectedDate, setSelectedDate } = useSelectedDate(); // Use context for date
 
+  const QueryDate = selectedDate 
+    ? new Date(selectedDate).toISOString().split('T')[0] 
+    : new Date().toISOString().split('T')[0];
+
   useEffect(() => {
     let isEffectActive = true;
   
@@ -22,7 +26,7 @@ function App() {
       });
   
       try {
-        const response = await fetch(`http://localhost:5001/images/${selectedDate}`);
+        const response = await fetch(`http://localhost:5001/images/${QueryDate}`);
         const data = await response.json();
         if (isEffectActive) {
           // Filter and set images only if the response is not null
@@ -36,7 +40,7 @@ function App() {
       }
     };
   
-    if (selectedDate) {
+    if (QueryDate) {
       fetchImages();
     }
   

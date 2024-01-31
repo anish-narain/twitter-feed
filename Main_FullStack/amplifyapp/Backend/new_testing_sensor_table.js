@@ -29,20 +29,28 @@ app.get("/images/:date", async (req, res) => {
 
   try {
     const data = await dynamodb.scan(params).promise();
-    const imagesWithUrls = data.Items.map((item) => ({
-      ...item,
-      ImageUrl:
-        item.BirdDetect && item.ImageFileName
-          ? `${bucketUrl}/${item.ImageFileName}`
-          : null,
-    }));
-    res.json(imagesWithUrls);
+    const sortedItems = data.Items
+      .map((item) => ({
+        ...item,
+        ImageUrl: item.BirdDetect && item.ImageFileName ? `${bucketUrl}/${item.ImageFileName}` : null,
+      }))
+      .filter((item) => item.ImageUrl) // Filter out items without an ImageUrl
+      .sort((a, b) => {
+        // Assuming UploadTimestamp is in the format 'HH:MM:SS'
+        const timeA = a.UploadTimestamp.split(':').map(Number);
+        const timeB = b.UploadTimestamp.split(':').map(Number);
+        // Convert hours and minutes to seconds and add them up to compare
+        return timeA[0] * 3600 + timeA[1] * 60 + timeA[2] - (timeB[0] * 3600 + timeB[1] * 60 + timeB[2]);
+      });
+
+    res.json(sortedItems);
     console.log(`IMAGE SENT FOR DATE: ${date}`);
   } catch (error) {
     console.error("DynamoDB error:", error);
     res.status(500).send(error.toString());
   }
 });
+
 
 app.get('/bird_detect_single_date/:date', async (req, res) => {
   const { date } = req.params; // Get the date from the URL parameter
