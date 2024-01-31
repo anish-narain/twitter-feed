@@ -1,5 +1,6 @@
 from bird_model import predict_image, BirdResnet, ResNet34, get_default_device, to_device
 import torch
+import os
 
 device=get_default_device()
 
@@ -8,4 +9,10 @@ model=(BirdResnet(model))
 model.load_state_dict(torch.load('bird-resnet34best.pth',map_location=torch.device(device)))
 
 
-predict_image('./bird_images/1.jpg', model)
+# Directory containing the images
+data_file_folder = os.path.join(os.getcwd(), "bird_images")
+
+for file in os.listdir(data_file_folder):
+    label, acc = predict_image(os.path.join(data_file_folder, file), model)
+
+    print('For filename', file, 'Predicted:',label,' with a probability of', acc +'%')

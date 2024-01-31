@@ -1,28 +1,54 @@
 import * as React from 'react';
+import { useState, useEffect } from 'react';
 import { useTheme } from '@mui/material/styles';
-import { LineChart, BarChart, XAxis, YAxis, Tooltip, axisClasses } from '@mui/x-charts'; // Import the Bar component
-
+import { BarChart, XAxis, YAxis, Tooltip, axisClasses } from '@mui/x-charts'; 
 import Title from './Title';
+import { useSelectedDate } from './SelectedDateContext'; // Import the context hook
 
-// Generate Sales Data
-function createData(time, amount, birds = 0) {
-  return { time, amount, birds };
+function createData(time, count) {
+  return { time, count };
 }
 
-const data = [
-  createData('00:00', 0),
-  createData('03:00', 1),
-  createData('06:00', 5),
-  createData('09:00', 2), // Bird spotted at 9:00 with 3 birds
-  createData('12:00', 8),
-  createData('15:00', 5), // Bird spotted at 15:00 with 1 bird
-  createData('18:00', 2),
-  createData('21:00', 0),
-  createData('24:00', 0),
-];
-
 export default function Chart() {
+  const { selectedDate } = useSelectedDate(); // Use the selected date from context
+
+  const currentDateOptions = { day: 'numeric', month: 'long', year: 'numeric' };
+  // Use selectedDate or default to current date if null
+  //const currentDate = selectedDate ? new Date(selectedDate).toLocaleDateString(undefined, currentDateOptions) : new Date().toLocaleDateString(undefined, currentDateOptions);
+  const QueryDate = selectedDate 
+    ? new Date(selectedDate).toISOString().split('T')[0] 
+    : new Date().toISOString().split('T')[0];
   const theme = useTheme();
+  const [data, setData] = useState([]); // Ensure data is initialized to an empty array
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`http://localhost:5001/bird_detect_haha/${QueryDate}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const json = await response.json();
+        if (json.birdDetectionsByBlock) { // Check if birdDetectionsByBlock exists
+          setData(Object.entries(json.birdDetectionsByBlock).map(([time, count]) => createData(time, count)));
+        } else {
+          console.error('Unexpected response structure:', json);
+        }
+      } catch (error) {
+        console.error('Failed to fetch data:', error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  // Calculate the maximum count for dynamic Y-axis scaling
+  const maxYValue = data.reduce((max, item) => item.count > max ? item.count : max, 0);
+
+
+  // Conditional rendering: Render chart only if data is available
+  if (data.length === 0) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <React.Fragment>
@@ -52,14 +78,14 @@ export default function Chart() {
                 fill: theme.palette.text.primary,
               },
               tickLabelStyle: theme.typography.body2,
-              max: 13,
-              min: -1,
+              max: maxYValue + 1, // Adjusted to fit data
+              min: 0,
               tickNumber: 3,
             },
           ]}
           series={[
             {
-              dataKey: 'amount',
+              dataKey: 'count',
               showMark: false,
               color: theme.palette.primary.light,
             },

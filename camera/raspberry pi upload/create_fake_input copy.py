@@ -75,6 +75,7 @@ while True:
         current_date_time_unique = datetime.datetime.now().isoformat()
         current_date = datetime.datetime.now().strftime("%Y-%m-%d")
         current_timestamp = datetime.datetime.now().strftime('%H:%M:%S')
+        
         if bird_detect:
             image_file_name = "Image_"+ current_date+ "_" + current_timestamp + ".jpg"   # fake image file name, has to be unique!!!
         else:
