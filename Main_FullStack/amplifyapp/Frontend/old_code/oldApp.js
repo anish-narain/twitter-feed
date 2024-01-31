@@ -6,7 +6,7 @@ import {
   View,
   Card,
 } from "@aws-amplify/ui-react";
-import DateSelector from './DateSelector'; // Ensure the path is correct
+import DateSelector from '../src/DateSelector'; // Ensure the path is correct
 
 // Add some custom CSS for styling
 import './App.css'; // Ensure you have this CSS file
