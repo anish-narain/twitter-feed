@@ -29,7 +29,7 @@ export default function Chart() {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const json = await response.json();
-        if (json.birdDetectionsByBlock) { // Check if birdDetectionsByBlock exists
+        if (json.birdDetectionsByBlock) {
           setData(Object.entries(json.birdDetectionsByBlock).map(([time, count]) => createData(time, count)));
         } else {
           console.error('Unexpected response structure:', json);
@@ -39,7 +39,8 @@ export default function Chart() {
       }
     };
     fetchData();
-  }, []);
+  }, [selectedDate]); // Include selectedDate in the dependency array
+  
 
   // Calculate the maximum count for dynamic Y-axis scaling
   const maxYValue = data.reduce((max, item) => item.count > max ? item.count : max, 0);
