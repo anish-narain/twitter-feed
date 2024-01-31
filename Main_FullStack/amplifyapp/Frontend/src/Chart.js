@@ -10,15 +10,15 @@ function createData(time, amount, birds = 0) {
 }
 
 const data = [
-  createData('00:00', 9),
-  createData('03:00', 9),
-  createData('06:00', 10),
-  createData('09:00', 11, 3), // Bird spotted at 9:00 with 3 birds
-  createData('12:00', 11),
-  createData('15:00', 12, 1), // Bird spotted at 15:00 with 1 bird
-  createData('18:00', 10),
-  createData('21:00', 9),
-  createData('24:00', 8),
+  createData('00:00', 0),
+  createData('03:00', 1),
+  createData('06:00', 5),
+  createData('09:00', 2), // Bird spotted at 9:00 with 3 birds
+  createData('12:00', 8),
+  createData('15:00', 5), // Bird spotted at 15:00 with 1 bird
+  createData('18:00', 2),
+  createData('21:00', 0),
+  createData('24:00', 0),
 ];
 
 export default function Chart() {
@@ -28,7 +28,7 @@ export default function Chart() {
     <React.Fragment>
       <Title>Today</Title>
       <div style={{ width: '100%', flexGrow: 1, overflow: 'hidden' }}>
-        <LineChart
+        <BarChart
           dataset={data}
           margin={{
             top: 16,
@@ -38,7 +38,7 @@ export default function Chart() {
           }}
           xAxis={[
             {
-              scaleType: 'point',
+              scaleType: 'band',
               dataKey: 'time',
               tickNumber: 2,
               tickLabelStyle: theme.typography.body2,
@@ -46,7 +46,7 @@ export default function Chart() {
           ]}
           yAxis={[
             {
-              label: 'No. birds detected',
+              label: 'Birds detections',
               labelStyle: {
                 ...theme.typography.body1,
                 fill: theme.palette.text.primary,
