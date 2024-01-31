@@ -76,7 +76,7 @@ while True:
     weight_food = round(Decimal(random.uniform(20.0, 700.0)),5)   # random food weight from 20.0g to 700.0g
 
     if weight_bird > 80:
-        bird_detect = Decimal(1)
+        bird_detect = True
 
         '''
         call camera to capture a picture and save it into folder data_file_folder
@@ -86,7 +86,7 @@ while True:
         
    
     else:
-        bird_detect = Decimal(0)
+        bird_detect = False
 
     print("Bird's weight:", weight_bird)
     print(f"Bird_detect: {bird_detect}")
@@ -125,12 +125,14 @@ while True:
             image_file_name = None
         
         # Add entry to DynamoDB
+        # Initially always set BirdDetect to 0
+        # Update bird detect in sever code after prediction
         response = table.put_item(
             Item={
                 'UploadDateTimeUnique':current_date_time_unique,
                 'UploadDate': current_date,
                 'UploadTimestamp': current_timestamp,
-                'BirdDetect': bird_detect,
+                'BirdDetect': Decimal(0),
                 'FoodWeight': weight_food,
                 'ImageFileName': image_file_name
             }

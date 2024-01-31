@@ -125,7 +125,7 @@ def predict_image(url, model):
     yb=prob(yb)
     _, preds  = torch.max(yb, dim=1)
     # Retrieve the class label
-    return bird_name_map.get(preds[0].item()), str(round(torch.max(yb).item(), 4)*100)
+    return bird_name_map.get(preds[0].item()), round(torch.max(yb).item(), 4)*100
     
     #plt.imshow(im)
     #plt.show()
