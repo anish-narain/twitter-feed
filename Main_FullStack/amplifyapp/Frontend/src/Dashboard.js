@@ -24,7 +24,6 @@ import Visits from './Visits';
 import BirdHistory from './BirdHistory';
 import BirdTrendsPage from './BirdTrendsPage'; // Replace with actual file name
 import FoodAlertsPage from './FoodAlertsPage'; // Replace with actual file name
-import Dashboard from './Dashboard'; // Replace with actual file name
 import FlutterDashIcon from '@mui/icons-material/FlutterDash';
 
 
@@ -89,7 +88,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 const defaultTheme = createTheme();
 
-function DashboardSignOut({ signOut }) {
+function Dashboard({ signOut }) {
   const [open, setOpen] = useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
