@@ -11,7 +11,7 @@ function App() {
 
   const fetchData = async () => {
     try {
-      const response = await fetch(`http://3.85.198.193:5001/weights/${date}`);
+      const response = await fetch(`http://localhost:5001/data/${date}`);
       const result = await response.json();
 
       if (Array.isArray(result) && result.length > 0) {
@@ -57,20 +57,24 @@ function App() {
             <thead>
               <tr>
                 <th>Upload Timestamp</th>
+                <th>Image</th>
+                <th>Bird Label</th>
+                <th>Accuracy</th>
                 <th>Bird Detect</th>
                 <th>Food Weight</th>
-                <th>Image</th>
               </tr>
             </thead>
             <tbody>
               {data.map((entry, index) => (
                 <tr key={index}>
                   <td>{entry.UploadTimestamp}</td>
-                  <td>{entry.BirdDetect}</td>
-                  <td>{entry.FoodWeight}</td>
                   <td>
                     {entry.ImageUrl && <img src={entry.ImageUrl} alt={`Bird Image ${index}`} />}
                   </td>
+                  <td>{entry.BirdLabel}</td>
+                  <td>{entry.Accuracy}</td>
+                  <td>{entry.BirdDetect}</td>
+                  <td>{entry.FoodWeight}</td>
                 </tr>
               ))}
             </tbody>

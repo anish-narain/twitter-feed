@@ -5,6 +5,8 @@ const app = express();
 const port = 5001;
 
 AWS.config.update({
+    accessKeyId: "AKIATO4ZT6IXMKE6KWXZ",
+    secretAccessKey: "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",
     region: "us-east-1"
 });
 
