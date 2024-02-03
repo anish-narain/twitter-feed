@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { withAuthenticator } from "@aws-amplify/ui-react";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
@@ -8,68 +6,75 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import Grid from '@mui/material/Grid'; // Add Grid import
-import Paper from '@mui/material/Paper'; // Add Paper import
-import FoodChart from './FoodChart'; // Import your chart component
-import Alert from './Alert'; // Import your alert component
+import Grid from '@mui/material/Grid';
+import FoodChart from './FoodChart';
+import Alert from './Alert';
 
-// Define a default theme
 const defaultTheme = createTheme();
 
 function Dashboard({ signOut }) {
-  // Simulated food data (you should replace this with actual data)
-  const [foodPercentage, setFoodPercentage] = useState(75); // Example: 75% remaining
+  // State to store the latest weight data
+  const [latestWeight, setLatestWeight] = useState(null);
 
   useEffect(() => {
-    // Simulated data update (e.g., fetching data from a server)
-    const interval = setInterval(() => {
-      // Update foodPercentage with new data
-      const newData = Math.random() * 100; // Replace with actual data
-      setFoodPercentage(newData);
-    }, 60000); // Update every minute (adjust as needed)
-
-    return () => {
-      clearInterval(interval); // Cleanup on unmount
+    // Fetch the latest weight data from the server
+    const fetchLatestWeightData = async () => {
+      try {
+        const response = await fetch("http://localhost:5001/weight-today");
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        // Assuming the data is sorted with the latest entry last, take the last entry
+        const latestEntry = data[data.length - 1];
+        if (latestEntry) {
+          setLatestWeight(latestEntry.amount);
+        }
+      } catch (error) {
+        console.error("Fetch error:", error.message);
+      }
     };
+
+    fetchLatestWeightData();
+
+    // Depending on how often we want to fetch the latest data below is an interval to fetch every minute
+    // const interval = setInterval(fetchLatestWeightData, 60000);
+    // return () => clearInterval(interval);
   }, []);
 
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          height: '100vh',
-        }}
-      >
+      <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
           <Typography variant="h4" gutterBottom>
             Food Alerts
           </Typography>
           <Grid container spacing={3}>
+            {/* Display the latest weight data */}
             <Grid item xs={12} md={4} lg={3}>
               <Card>
                 <CardContent>
                   <Typography variant="h6" gutterBottom>
-                    Food Percentage
+                    Latest Weight
                   </Typography>
                   <Typography variant="body1">
-                    {foodPercentage.toFixed(2)}%
+                    {latestWeight !== null ? `${latestWeight.toFixed(2)} g` : 'Loading...'}
                   </Typography>
                 </CardContent>
               </Card>
             </Grid>
+            {/* Chart component that might need the latest weight data passed as a prop */}
             <Grid item xs={12} md={8} lg={9}>
-              <FoodChart />
+              <FoodChart latestWeight={latestWeight} />
             </Grid>
           </Grid>
-          <Alert threshold={25} foodPercentage={foodPercentage} /> {/* Render your alert component */}
-          {/* Add more content and components as needed */}
+          {/* Alert component might need modification to accept the latest weight instead of percentage */}
+          <Alert threshold={25} latestWeight={latestWeight} />
         </Container>
       </Box>
     </ThemeProvider>
   );
 }
 
-export default withAuthenticator(Dashboard);
+export default Dashboard;

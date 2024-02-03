@@ -206,39 +206,6 @@ app.get('/data/:date', async (req, res) => {
   }
 });
 
-app.get("/latest-weight-today", async (req, res) => {
-  const today = "2024-01-29";  // For demonstration, use a fixed date
-
-  const params = {
-    TableName: tableName,
-    FilterExpression: "contains(UploadDateTimeUnique, :date)",
-    ExpressionAttributeValues: {
-      ":date": today,
-    },
-  };
-
-  try {
-    const data = await dynamodb.scan(params).promise();
-    const weightData = data.Items.map((item) => ({
-      time: item.UploadTimestamp,
-      amount: item.FoodWeight,
-    })).filter((item) => item.amount)
-      .sort((a, b) => {
-        const timeA = a.time.split(':').map(Number);
-        const timeB = b.time.split(':').map(Number);
-        return timeA[0] * 3600 + timeA[1] * 60 + timeA[2] - (timeB[0] * 3600 + timeB[1] * 60 + timeB[2]);
-      });
-
-    // Send only the last (latest) weight data
-    res.json(weightData[weightData.length - 1]); // Assuming the array is not empty
-    console.log(`LATEST WEIGHT DATA SENT FOR TODAY: ${today}`);
-  } catch (error) {
-    console.error("DynamoDB error:", error);
-    res.status(500).send(error.toString());
-  }
-});
-
-
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
