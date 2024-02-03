@@ -11,7 +11,7 @@ function Alert({ latestWeight }) {
     <Paper elevation={3} style={{ padding: "16px", maxWidth: "300px" }}>
       {isLowFood ? (
         <>
-          <Typography variant="h6">Food is running low!</Typography>
+          <Title>Food is running low!</Title>
           <Typography variant="body1">
             Latest Weight:{" "}
             {latestWeight !== null

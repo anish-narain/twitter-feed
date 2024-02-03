@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
+  ResponsiveContainer,
   LineChart,
   Line,
   XAxis,
@@ -53,9 +54,8 @@ export default function FoodChart() {
   return (
     <React.Fragment>
       <Title>Today</Title>
+      <ResponsiveContainer width="100%" height="100%">
         <LineChart
-          width={500}
-          height={300}
           data={chartData}
           margin={{ top: 16, right: 20, left: 30, bottom: 30 }}
         >
@@ -121,6 +121,7 @@ export default function FoodChart() {
             activeDot={{ r: 8 }}
           />
         </LineChart>
+        </ResponsiveContainer>
         {chartData.length === 0 && <div>No data for the current date.</div>}
     </React.Fragment>
   );
