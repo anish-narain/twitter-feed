@@ -72,11 +72,21 @@ export default function FoodChart() {
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis
             dataKey="time"
-            tickFormatter={(time) => time.substring(0, 5)} // Extracts only 'HH:MM' from your time string
+            scale="time"
+            type="number"
+            domain={["dataMin", "dataMax"]}
+            tickFormatter={(unixTime) => {
+              // Format the tick to display however you prefer
+              const date = new Date(unixTime);
+              return `${date.getHours()}:${String(date.getMinutes()).padStart(
+                2,
+                "0"
+              )}`;
+            }}
             label={{
               value: "Time of Day",
-              position: 'insideBottomRight',
-              offset: -15
+              position: "insideBottomRight",
+              offset: -15,
             }}
           />
           <YAxis
@@ -87,7 +97,24 @@ export default function FoodChart() {
               dy: 50,
             }}
           />
-          <Tooltip />
+          <Tooltip
+            formatter={(value, name) => {
+              if (name === "Weight") {
+                return [`${value}`, "Weight"]; // Ensure the weight is labelled correctly
+              }
+            }}
+            labelFormatter={(label) => {
+              const date = new Date(label);
+              return [
+                `Time : ${String(date.getHours()).padStart(2, "0")}:${String(
+                  date.getMinutes()
+                ).padStart(2, "0")}:${String(date.getSeconds()).padStart(
+                  2,
+                  "0"
+                )}`,
+              ];
+            }}
+          />
           <Legend
             wrapperStyle={{
               // Adjust these values to move the legend to your desired location

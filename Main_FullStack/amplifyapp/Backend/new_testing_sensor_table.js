@@ -140,9 +140,6 @@ const getCurrentDate = () => {
 app.get("/weight-today", async (req, res) => {
   const today = "2024-01-29";  // Use a fixed date for demonstration
 
-  // Uncomment and implement the getCurrentDate function to use the current date
-  // const today = getCurrentDate(); 
-
   const params = {
     TableName: tableName,
     FilterExpression: "contains(UploadDateTimeUnique, :date)",
@@ -153,16 +150,14 @@ app.get("/weight-today", async (req, res) => {
 
   try {
     const data = await dynamodb.scan(params).promise();
-    const weightData = data.Items.map((item) => ({
-      time: item.UploadTimestamp,
-      amount: item.FoodWeight,
-    })).filter((item) => item.amount) // Filter out any items without weight
-      .sort((a, b) => {
-        // Assuming UploadTimestamp is in the format 'HH:MM:SS'
-        const timeA = a.time.split(':').map(Number);
-        const timeB = b.time.split(':').map(Number);
-        return timeA[0] * 3600 + timeA[1] * 60 + timeA[2] - (timeB[0] * 3600 + timeB[1] * 60 + timeB[2]);
-      });
+    const weightData = data.Items
+      .map((item) => ({
+        // Send the time as a timestamp (number of milliseconds since the Unix epoch)
+        time: new Date(item.UploadDateTimeUnique).getTime(),
+        amount: item.FoodWeight,
+      }))
+      .filter((item) => item.amount) // Filter out any items without weight
+      .sort((a, b) => a.time - b.time); // Sort the data based on the timestamp
 
     // Send the sorted data
     res.json(weightData);
@@ -172,6 +167,7 @@ app.get("/weight-today", async (req, res) => {
     res.status(500).send(error.toString());
   }
 });
+
 
 app.get('/data/:date', async (req, res) => {
   const { date } = req.params;
@@ -210,7 +206,7 @@ app.get('/data/:date', async (req, res) => {
   }
 });
 
-app.get("/weight-today", async (req, res) => {
+app.get("/latest-weight-today", async (req, res) => {
   const today = "2024-01-29";  // For demonstration, use a fixed date
 
   const params = {
