@@ -73,6 +73,11 @@ export default function FoodChart() {
           <XAxis
             dataKey="time"
             tickFormatter={(time) => time.substring(0, 5)} // Extracts only 'HH:MM' from your time string
+            label={{
+              value: "Time of Day",
+              position: 'insideBottomRight',
+              offset: -15
+            }}
           />
           <YAxis
             label={{
@@ -83,10 +88,18 @@ export default function FoodChart() {
             }}
           />
           <Tooltip />
-          <Legend />
+          <Legend
+            wrapperStyle={{
+              // Adjust these values to move the legend to your desired location
+              top: -6,
+              left: 75,
+              transform: "translate(0, -40)",
+            }}
+          />
           <Line
             type="monotone"
             dataKey="amount"
+            name="Weight"
             stroke="#8884d8"
             activeDot={{ r: 8 }}
           />

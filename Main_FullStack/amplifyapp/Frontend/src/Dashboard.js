@@ -79,9 +79,9 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
           easing: theme.transitions.easing.sharp,
           duration: theme.transitions.duration.leavingScreen,
         }),
-        width: theme.spacing(7),
+        width: theme.spacing(9),
         [theme.breakpoints.up('sm')]: {
-          width: theme.spacing(9),
+          width: theme.spacing(14),
         },
       }),
     },
