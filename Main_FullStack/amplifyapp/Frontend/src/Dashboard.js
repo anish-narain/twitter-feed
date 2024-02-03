@@ -88,7 +88,13 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-const defaultTheme = createTheme();
+const defaultTheme = createTheme({
+  typography: {
+    fontFamily: "'Lilita One', cursive",
+  },
+  // ... other theme settings
+});
+
 
 function Dashboard({ signOut }) {
   const [open, setOpen] = useState(true);
@@ -179,11 +185,11 @@ function Dashboard({ signOut }) {
           >
             <Toolbar />
             <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-              <ConditionalComponents /> {/* Use the new component here */}
+              <ConditionalComponents /> {}
               <Routes>
                 <Route path="/BirdTrendsPage" element={<BirdTrendsPage />} />
                 <Route path="/FoodAlertsPage" element={<FoodAlertsPage />} />
-                {/* Add more routes as needed */}
+                {}
               </Routes>
             </Container>
             <Toolbar />
@@ -191,7 +197,7 @@ function Dashboard({ signOut }) {
             </Container>
           </Box>
         </Box>
-      </Router> {/* Close the Router wrapping the entire app */}
+      </Router> {}
     </ThemeProvider>
   );
 }

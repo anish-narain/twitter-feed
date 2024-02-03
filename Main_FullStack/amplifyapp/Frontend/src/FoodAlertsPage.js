@@ -10,7 +10,12 @@ import Grid from '@mui/material/Grid';
 import FoodChart from './FoodChart';
 import Alert from './Alert';
 
-const defaultTheme = createTheme();
+const defaultTheme = createTheme({
+  typography: {
+    fontFamily: "'Lilita One', cursive",
+  },
+  // ... other theme settings
+});
 
 function Dashboard({ signOut }) {
   // State to store the latest weight data

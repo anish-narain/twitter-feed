@@ -76,7 +76,7 @@ export default function Chart() {
               label: 'Bird Detections',
               labelStyle: {
                 ...theme.typography.body1,
-                fill: theme.palette.text.primary,
+                fill: theme.palette.text.secondary,
               },
               tickLabelStyle: theme.typography.body2,
               max: maxYValue + 1, // Adjusted to fit data
