@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Grid from '@mui/material/Grid';
-import FoodChart from './FoodChart';
-import Alert from './Alert';
+import React, { useState, useEffect } from "react";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Grid from "@mui/material/Grid";
+import FoodChart from "./FoodChart";
+import Alert from "./Alert";
+import Title from "./Title";
 
 const defaultTheme = createTheme({
   typography: {
@@ -50,32 +51,49 @@ function Dashboard({ signOut }) {
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
-      <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+      <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-          <Typography variant="h4" gutterBottom>
+          {/*<Typography variant="h4" gutterBottom>
             Food Alerts
-          </Typography>
+  </Typography>*/}
           <Grid container spacing={3}>
-            {/* Display the latest weight data */}
-            <Grid item xs={12} md={4} lg={3}>
+            {/* Food Chart on the left */}
+            <Grid item xs={12} md={8} lg={9}>
               <Card>
-                <CardContent>
-                  <Typography variant="h6" gutterBottom>
-                    Latest Weight
-                  </Typography>
-                  <Typography variant="body1">
-                    {latestWeight !== null ? `${latestWeight.toFixed(2)} g` : 'Loading...'}
-                  </Typography>
+                <CardContent style={{ height: '400px' }}>
+                  <FoodChart latestWeight={latestWeight} />
                 </CardContent>
               </Card>
             </Grid>
-            {/* Chart component that might need the latest weight data passed as a prop */}
-            <Grid item xs={12} md={8} lg={9}>
-              <FoodChart latestWeight={latestWeight} />
+            {/* Alerts on the right */}
+            <Grid
+              item
+              xs={12}
+              md={4}
+              lg={3}
+              container
+              direction="column"
+              spacing={2}
+            >
+              {/* Latest Weight alert */}
+              <Grid item>
+                <Card>
+                  <CardContent>
+                    <Title>Latest Weight</Title>
+                    <Typography variant="body1">
+                      {latestWeight !== null
+                        ? `${latestWeight.toFixed(2)} g`
+                        : "Loading..."}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+              {/* Food Supply alert */}
+              <Grid item>
+                <Alert latestWeight={latestWeight} />
+              </Grid>
             </Grid>
           </Grid>
-          {/* Alert component might need modification to accept the latest weight instead of percentage */}
-          <Alert threshold={25} latestWeight={latestWeight} />
         </Container>
       </Box>
     </ThemeProvider>

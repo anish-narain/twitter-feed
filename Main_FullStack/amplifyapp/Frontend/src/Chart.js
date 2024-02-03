@@ -54,7 +54,7 @@ export default function Chart() {
   return (
     <React.Fragment>
       <Title>{currentDate}</Title>
-      <div style={{ width: '100%', flexGrow: 1, overflow: 'hidden' }}>
+      <div style={{ width: '100%', flexGrow: 1, overflow: 'hidden'}}>
         <BarChart
           dataset={data}
           margin={{

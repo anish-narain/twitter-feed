@@ -49,20 +49,10 @@ export default function FoodChart() {
     return <div>Error loading chart: {error}</div>;
   }
 
-  const generateTicks = () => {
-    const ticks = [];
-    for (let i = 0; i < 24; i += 3) {
-      // Pad the hour with 0 if it is less than 10 for consistency
-      const hour = i < 10 ? `0${i}` : i;
-      ticks.push(`${hour}:00:00`); // Assuming your time is in 'HH:mm:ss' format
-    }
-    return ticks;
-  };
 
   return (
     <React.Fragment>
       <Title>Today</Title>
-      <div style={{ width: "100%", flexGrow: 1, overflow: "hidden" }}>
         <LineChart
           width={500}
           height={300}
@@ -132,7 +122,6 @@ export default function FoodChart() {
           />
         </LineChart>
         {chartData.length === 0 && <div>No data for the current date.</div>}
-      </div>
     </React.Fragment>
   );
 }
