@@ -21,6 +21,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import { Tab, Tabs } from '@mui/material'; // Import Tabs and Tab components
 import Chart from './Chart';
 import Visits from './Visits';
+import logo from './logo.png';
 import BirdHistory from './BirdHistory';
 import BirdTrendsPage from './BirdTrendsPage'; // Replace with actual file name
 import FoodAlertsPage from './FoodAlertsPage'; // Replace with actual file name
@@ -138,8 +139,7 @@ function Dashboard({ signOut }) {
                 noWrap
                 sx={{ flexGrow: 1 }}
               >
-                Twitter Feed
-                <FlutterDashIcon />
+                <img src={logo} style={{ height: '60px', marginRight: '5px' ,  marginTop: '5px'}} />
               </Typography>
               <IconButton color="inherit" onClick={signOut}></IconButton>
               <Button color="inherit" onClick={signOut}>Sign Out</Button>
