@@ -24,19 +24,33 @@ export default function FoodChart() {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        const data = await response.json();
+        let data = await response.json();
         if (data.length === 0) {
           // Handle the case where there is no data for today
           setChartData([]);
         } else {
-          setChartData(data);
+          // Filter out consecutive points with the same weight
+          const filteredData = data.reduce((acc, current, index, array) => {
+            // Always include the first data point
+            if (index === 0) {
+              acc.push(current);
+            } else {
+              // Include the data point if it's different from the last one included
+              const lastIncluded = acc[acc.length - 1];
+              if (current.amount !== lastIncluded.amount) {
+                acc.push(current);
+              }
+            }
+            return acc;
+          }, []);
+          setChartData(filteredData);
         }
       } catch (error) {
         console.error("Fetch error:", error.message);
         setError(error.message);
       } finally {
         setLoading(false);
-      }
+      }    
     };
 
     fetchWeightData();

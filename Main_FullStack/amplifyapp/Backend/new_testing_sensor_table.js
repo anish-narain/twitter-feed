@@ -33,6 +33,7 @@ app.get("/images/:date", async (req, res) => {
       .map((item) => ({
         ...item,
         ImageUrl: item.BirdDetect && item.ImageFileName ? `${bucketUrl}/${item.ImageFileName}` : null,
+        //ImageUrl: item.ImageFileName ? `${bucketUrl}/${item.ImageFileName}` : null,
       }))
       .filter((item) => item.ImageUrl) // Filter out items without an ImageUrl
       .sort((a, b) => {
@@ -138,7 +139,7 @@ const getCurrentDate = () => {
 };
 
 app.get("/weight-today", async (req, res) => {
-  const today = "2024-01-29";  // Use a fixed date for demonstration
+  const today = "2022-02-03";  // Use a fixed date for demonstration
 
   const params = {
     TableName: tableName,

@@ -75,7 +75,7 @@ while True:
     # random brid weight from 0 to 1500g
     weight_food = round(Decimal(random.uniform(20.0, 700.0)),5)   # random food weight from 20.0g to 700.0g
 
-    if weight_bird > 80:
+    if weight_bird > 20:
         bird_detect = Decimal(1)
 
         '''
