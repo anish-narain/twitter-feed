@@ -45,7 +45,7 @@ app.get("/images/:date", async (req, res) => {
       });
 
     res.json(sortedItems);
-    console.log(`IMAGE SENT FOR DATE: ${date}`);
+    console.log(`IMAGES SENT FOR DATE: ${date}`);
   } catch (error) {
     console.error("DynamoDB error:", error);
     res.status(500).send(error.toString());
@@ -80,7 +80,7 @@ app.get('/bird_detect_single_date/:date', async (req, res) => {
   }
 });
 
-app.get('/bird_detect_haha/:date', async (req, res) => {
+app.get('/bird_detections_chart/:date', async (req, res) => {
   const { date } = req.params; // Get the date from the URL parameter
 
   const params = {
@@ -140,6 +140,8 @@ const getCurrentDate = () => {
 
 app.get("/weight-today", async (req, res) => {
   const today = "2022-02-03";  // Use a fixed date for demonstration
+  //const today = getCurrentDate();  // Use a fixed date for demonstration
+
 
   const params = {
     TableName: tableName,
@@ -169,6 +171,36 @@ app.get("/weight-today", async (req, res) => {
   }
 });
 
+app.get("/weight-on-date/:date", async (req, res) => {
+  const { date } = req.params;
+  
+  const params = {
+    TableName: tableName,
+    FilterExpression: "contains(UploadDateTimeUnique, :date)",
+    ExpressionAttributeValues: {
+      ":date": date,
+    },
+  };
+
+  try {
+    const data = await dynamodb.scan(params).promise();
+    const weightData = data.Items
+      .map((item) => ({
+        // Send the time as a timestamp (number of milliseconds since the Unix epoch)
+        time: new Date(item.UploadDateTimeUnique).getTime(),
+        amount: item.FoodWeight,
+      }))
+      .filter((item) => item.amount) // Filter out any items without weight
+      .sort((a, b) => a.time - b.time); // Sort the data based on the timestamp
+
+    // Send the sorted data
+    res.json(weightData);
+    console.log(`WEIGHT DATA SENT FOR DATE: ${date}`);
+  } catch (error) {
+    console.error("DynamoDB error:", error);
+    res.status(500).send(error.toString());
+  }
+});
 
 app.get('/data/:date', async (req, res) => {
   const { date } = req.params;

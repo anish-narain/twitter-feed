@@ -12,15 +12,24 @@ import {
 
 import Title from "./Title";
 
-export default function FoodChart() {
+export default function FoodChart({ selectedDate }) {
   const [chartData, setChartData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Function to format the date
+  const formatDate = (dateString) => {
+    const options = { day: 'numeric', month: 'long', year: 'numeric' };
+    return new Date(dateString).toLocaleDateString('en-GB', options);
+  };
+
+  // Determine the chart title based on selectedDate
+  const chartTitle = selectedDate ? formatDate(selectedDate) : 'Today';
+
   useEffect(() => {
     const fetchWeightData = async () => {
       try {
-        const response = await fetch("http://localhost:5001/weight-today");
+        const response = await fetch(`http://localhost:5001/weight-on-date/${selectedDate}`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -54,7 +63,7 @@ export default function FoodChart() {
     };
 
     fetchWeightData();
-  }, []);
+  }, [selectedDate]);
 
   if (loading) {
     return <div>Loading chart...</div>;
@@ -67,7 +76,7 @@ export default function FoodChart() {
 
   return (
     <React.Fragment>
-      <Title>Today</Title>
+      <Title>{chartTitle}</Title>
       <ResponsiveContainer width="100%" height="100%">
         <LineChart
           data={chartData}

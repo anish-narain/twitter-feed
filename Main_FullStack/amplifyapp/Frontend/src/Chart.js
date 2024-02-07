@@ -24,7 +24,7 @@ export default function Chart() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:5001/bird_detect_haha/${QueryDate}`);
+        const response = await fetch(`http://localhost:5001/bird_detections_chart/${QueryDate}`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }

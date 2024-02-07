@@ -13,10 +13,7 @@ function Alert({ latestWeight }) {
         <>
           <Title>Food is running low!</Title>
           <Typography variant="body1">
-            Latest Weight:{" "}
-            {latestWeight !== null
-              ? `${latestWeight.toFixed(2)} g`
-              : "Loading..."}
+            Please fill up your Twitter Feeder to maximise your chances of seeing more birds :)
           </Typography>
         </>
       ) : (
