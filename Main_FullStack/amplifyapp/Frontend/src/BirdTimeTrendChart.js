@@ -5,7 +5,7 @@ import Title from './Title';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 
-function BirdTimeTrendChart({ selectedBird }) {
+function BirdTimeTrendChart({ selectedBird, onMaxTimeOfDay }) {
   const theme = useTheme();
   const [data, setData] = useState([]);
 
@@ -54,6 +54,14 @@ function BirdTimeTrendChart({ selectedBird }) {
       detections: timeIntervals[interval],
     }));
   };
+
+  useEffect(() => {
+    if (data.length > 0) {
+      const maxTime = data.reduce((max, item) => max.detections > item.detections ? max : item, data[0]);
+      // Call the callback with the maxTime
+      onMaxTimeOfDay(maxTime.time);
+    }
+  }, [data]);
 
   const getColor = (time) => {
     switch(time) {

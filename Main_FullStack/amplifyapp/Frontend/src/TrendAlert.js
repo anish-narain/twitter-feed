@@ -3,29 +3,19 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Title from "./Title";
 
-function Alert({ latestWeight }) {
-  const weightThreshold = 500; // Set the weight threshold for the alert
-  const isLowFood = latestWeight < weightThreshold;
-
+function TrendAlert({ maxTime, maxTempRange }) {
   return (
-    <Paper elevation={3} style={{ padding: "16px", maxWidth: "300px" }}>
-      {isLowFood ? (
-        <>
-          <Title>Food is running low!</Title>
-          <Typography variant="body1">
-            Please fill up your Twitter Feeder to maximise your chances of seeing more birds :)
-          </Typography>
-        </>
-      ) : (
-        <>
-          <Title>Food supply is sufficient. </Title>
-          <Typography variant="body1">
-            You have enough food for your birds.
-          </Typography>
-        </>
-      )}
+    <Paper elevation={3} style={{ padding: "16px", maxWidth: "300px", marginBottom: "16px" }}>
+      <Title>{`Most Active Time: ${maxTime}`}</Title>
+      <Typography variant="body1">
+        {`The birds are most commonly detected during the ${maxTime} time.`}
+      </Typography>
+      <Title>{`Preferred Temperature Range: ${maxTempRange}`}</Title>
+      <Typography variant="body1">
+        {`The birds are most commonly detected within the temperature range of ${maxTempRange} degrees Celsius.`}
+      </Typography>
     </Paper>
   );
 }
 
-export default Alert;
+export default TrendAlert;

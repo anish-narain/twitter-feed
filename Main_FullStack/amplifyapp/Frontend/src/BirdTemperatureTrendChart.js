@@ -5,7 +5,7 @@ import Title from './Title';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 
-function BirdTemperatureTrendChart({ selectedBird }) {
+function BirdTemperatureTrendChart({ selectedBird, onMaxTemperatureRange }) {
   const theme = useTheme();
   const [data, setData] = useState([]);
 
@@ -55,6 +55,14 @@ function BirdTemperatureTrendChart({ selectedBird }) {
       fetchData();
     }
   }, [selectedBird]);
+
+  useEffect(() => {
+    if (data.length > 0) {
+      const maxTempRange = data.reduce((max, item) => max.detections > item.detections ? max : item, data[0]);
+      // Call the callback with the maxTempRange
+      onMaxTemperatureRange(maxTempRange.temperature);
+    }
+  }, [data]);
 
   if (data.length === 0) {
     return <div>No data available for {selectedBird}.</div>;
