@@ -99,6 +99,43 @@ app.get('/bird_temperature_trend/:birdType', async (req, res) => {
   }
 });
 
+app.get('/bird_time_trend/:birdType', async (req, res) => {
+  const { birdType } = req.params;
+
+  const params = {
+    TableName: tableName,
+    FilterExpression: "BirdLabel = :birdType",
+    ExpressionAttributeValues: {
+      ":birdType": birdType,
+    },
+  };
+
+  try {
+    const data = await dynamodb.scan(params).promise();
+
+    const timeTrendData = {};
+    // Example time binning logic (adjust based on desired intervals)
+    data.Items.forEach((item) => {
+      if (item.BirdDetect === 1) {
+        const timestamp = new Date(item.UploadDateTimeUnique);
+        const hour = timestamp.getHours();
+        const timeBin = `${String(hour).padStart(2, '0')}:00`; // Hourly bins
+
+        if (!timeTrendData[timeBin]) {
+          timeTrendData[timeBin] = { time: timeBin, detections: 0 };
+        }
+        timeTrendData[timeBin].detections += 1;
+      }
+    });
+
+    const responseData = Object.values(timeTrendData).sort((a, b) => a.time.localeCompare(b.time));
+    console.log(`Bird time trend data sent for bird type: ${birdType}`);
+    res.json(responseData);
+  } catch (error) {
+    console.error("DynamoDB error:", error);
+    res.status(500).send(error.toString());
+  }
+});
 
 
 app.get('/bird_detect_single_date/:date', async (req, res) => {

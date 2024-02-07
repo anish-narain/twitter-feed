@@ -10,26 +10,32 @@ function BirdTemperatureTrendChart({ selectedBird }) {
   const [data, setData] = useState([]);
 
   // Function to process and bin the temperature data
-  const processTemperatureData = (jsonData) => {
+  function processTemperatureData(jsonData) {
     const temperatures = jsonData.map(item => parseFloat(item.temperature));
     const minTemp = Math.min(...temperatures);
     const maxTemp = Math.max(...temperatures);
     const numBins = Math.ceil(Math.sqrt(temperatures.length)); // Number of bins based on square root heuristic
     const binSize = (maxTemp - minTemp) / numBins;
     const bins = {};
-
+  
     jsonData.forEach(item => {
       const binIndex = Math.floor((parseFloat(item.temperature) - minTemp) / binSize);
       const binKey = `${(minTemp + binIndex * binSize).toFixed(1)}-${(minTemp + (binIndex + 1) * binSize).toFixed(1)}`;
-
+  
       if (!bins[binKey]) {
         bins[binKey] = { temperature: binKey, detections: 0 };
       }
       bins[binKey].detections += item.detections;
     });
-
-    return Object.values(bins);
-  };
+  
+    // Convert object values to array and sort based on the starting temperature of each bin
+    return Object.values(bins).sort((a, b) => {
+      const aMinTemp = parseFloat(a.temperature.split('-')[0]);
+      const bMinTemp = parseFloat(b.temperature.split('-')[0]);
+      return aMinTemp - bMinTemp;
+    });
+  }
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,7 +63,7 @@ function BirdTemperatureTrendChart({ selectedBird }) {
   return (
     <Card>
       <CardContent>
-        <Title>Temperature Trend for {selectedBird}</Title>
+        <Title>Temperatures Trend for {selectedBird}</Title>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart
             data={data}
