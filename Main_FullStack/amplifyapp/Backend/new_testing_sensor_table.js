@@ -52,6 +52,54 @@ app.get("/images/:date", async (req, res) => {
   }
 });
 
+app.get('/bird_temperature_trend/:birdType', async (req, res) => {
+  const { birdType } = req.params;
+
+  const params = {
+    TableName: tableName,
+    FilterExpression: "BirdLabel = :birdType",
+    ExpressionAttributeValues: {
+      ":birdType": birdType,
+    },
+  };
+
+  try {
+    const data = await dynamodb.scan(params).promise();
+
+    const temperatureTrendData = {};
+
+    data.Items.forEach((item) => {
+      // Check if Temperature is defined before accessing its value
+      const temp = item.Temperature?.toString(); // Use optional chaining operator
+
+      if (!temp) {
+        // Skip this item if Temperature is undefined
+        return;
+      }
+
+      if (!temperatureTrendData[temp]) {
+        temperatureTrendData[temp] = {
+          temperature: temp,
+          detections: 0
+        };
+      }
+      
+      if (item.BirdDetect === 1) {
+        temperatureTrendData[temp].detections += 1;
+      }
+    });
+
+    const responseData = Object.values(temperatureTrendData);
+
+    console.log(`Bird temperature trend data sent for bird type: ${birdType}`);
+    res.json(responseData);
+  } catch (error) {
+    console.error("DynamoDB error:", error);
+    res.status(500).send(error.toString());
+  }
+});
+
+
 
 app.get('/bird_detect_single_date/:date', async (req, res) => {
   const { date } = req.params; // Get the date from the URL parameter
@@ -139,9 +187,8 @@ const getCurrentDate = () => {
 };
 
 app.get("/weight-today", async (req, res) => {
-  const today = "2022-02-03";  // Use a fixed date for demonstration
-  //const today = getCurrentDate();  // Use a fixed date for demonstration
-
+  //const today = "2022-02-03";  // Use a fixed date for demonstration
+  const today = getCurrentDate();  
 
   const params = {
     TableName: tableName,
@@ -202,6 +249,25 @@ app.get("/weight-on-date/:date", async (req, res) => {
   }
 });
 
+app.get('/unique-bird-labels', async (req, res) => {
+  const params = {
+    TableName: tableName,
+    ProjectionExpression: "BirdLabel",
+  };
+  try {
+    const data = await dynamodb.scan(params).promise();
+    // Extract unique labels and sort them
+    const labels = [...new Set(data.Items.map(item => item.BirdLabel))].sort();
+    console.log(`Unique Bird Labels Sent`);
+    res.json(labels);
+  } catch (error) {
+    console.error("DynamoDB error:", error);
+    res.status(500).send(error.toString());
+  }
+});
+
+
+
 app.get('/data/:date', async (req, res) => {
   const { date } = req.params;
 
@@ -242,3 +308,4 @@ app.get('/data/:date', async (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
+
