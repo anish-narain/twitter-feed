@@ -10,7 +10,7 @@ model.load_state_dict(torch.load('bird-resnet34best.pth',map_location=torch.devi
 
 
 # Directory containing the images
-data_file_folder = os.path.join(os.getcwd(), "bird_images")
+data_file_folder = os.path.join(os.getcwd(), "test")
 
 for file in os.listdir(data_file_folder):
     label, acc = predict_image(os.path.join(data_file_folder, file), model)

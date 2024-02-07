@@ -108,8 +108,12 @@ def WT_data():
         time.sleep(5*60)  # sleep 5 minutes
 
 def read_latest_data():    
+
+    bird_detect = 0
+
     while(True):
-        #get weight bird
+
+        #get weight bird------------------------
 
         if weight_bird > 20 and bird_detect == 0:  ## first detect bird
             bird_detect = 1
@@ -170,10 +174,13 @@ def read_latest_data():
 
         
 
-# Start threads
-producer_thread = threading.Thread(target=WT_data)
+Bird_weight_thread = threading.Thread(target=xxx)
+Bird_weight_thread.start()
 
-producer_thread.start()
+# Start threads
+W_T_data_thread = threading.Thread(target=WT_data)
+W_T_data_thread.start()
+
 time.sleep(5)
 read_latest_data()
 
