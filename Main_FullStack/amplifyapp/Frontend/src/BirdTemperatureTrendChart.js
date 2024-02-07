@@ -69,7 +69,7 @@ function BirdTemperatureTrendChart({ selectedBird }) {
             }}
           >
             <XAxis dataKey="temperature" label={{ value: 'Temperature Range (in degrees Celsius)', position: 'insideBottom', offset: -10 }} />
-            <YAxis label={{ value: 'Bird Detections', angle: -90, position: 'insideLeft' }} />
+            <YAxis label={{ value: 'Bird Detections', angle: -90, position: 'insideLeft', dy: 50 }} />
             <Tooltip />
             <Bar dataKey="detections" fill={theme.palette.primary.main} />
           </BarChart>
