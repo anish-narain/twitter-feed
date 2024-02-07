@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '@mui/material/styles';
-import { BarChart, XAxis, YAxis, Tooltip, Legend, Bar } from 'recharts'; // Using recharts for simplicity
+import { BarChart, XAxis, YAxis, Tooltip, Bar, ResponsiveContainer } from 'recharts';
 import Title from './Title';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
 
 function BirdTemperatureTrendChart({ selectedBird }) {
   const theme = useTheme();
@@ -32,26 +34,27 @@ function BirdTemperatureTrendChart({ selectedBird }) {
   }
 
   return (
-    <React.Fragment>
-      <Title>Temperature Trend for {selectedBird}</Title>
-      <BarChart
-        width={500}
-        height={300}
-        data={data}
-        margin={{
-          top: 5,
-          right: 30,
-          left: 20,
-          bottom: 5,
-        }}
-      >
-        <XAxis dataKey="temperature" />
-        <YAxis />
-        <Tooltip />
-        <Legend />
-        <Bar dataKey="detections" fill={theme.palette.primary.main} name="Detections" />
-      </BarChart>
-    </React.Fragment>
+    <Card>
+      <CardContent>
+        <Title>Temperature Trend for {selectedBird}</Title>
+        <ResponsiveContainer width="100%" height={300}>
+          <BarChart
+            data={data}
+            margin={{
+              top: 10,
+              right: 30,
+              left: 20,
+              bottom: 20,
+            }}
+          >
+            <XAxis dataKey="temperature" type="number" domain={['auto', 'auto']} label={{ value: 'Temperature (in degrees Celsius)', position: 'insideBottom', offset: -10 }} />
+            <YAxis label={{ value: 'Bird Detections', angle: -90, position: 'insideLeft' }} />
+            <Tooltip />
+            <Bar dataKey="detections" fill={theme.palette.primary.main} />
+          </BarChart>
+        </ResponsiveContainer>
+      </CardContent>
+    </Card>
   );
 }
 
