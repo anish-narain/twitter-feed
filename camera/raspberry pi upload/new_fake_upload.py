@@ -91,7 +91,7 @@ def WT_data():
     current_temperature = 22.0
 
     # Set datetime---------------------------------------------------------------------------
-    current_date_time_unique = datetime.datetime(2022, 2, 3, 4, 0, 0)
+    current_date_time_unique = datetime.datetime(2024, 1, 13, 4, 0, 0)
     increment = datetime.timedelta(minutes=5)
 
     while True:
@@ -105,7 +105,7 @@ def WT_data():
             current_weight = float(weight_food)
         
 
-        temperature = round(random.choices([Decimal(current_temperature), Decimal(min(27.0, max(19.0, random.uniform(current_temperature-0.5, current_temperature+0.5))))],
+        temperature = round(random.choices([Decimal(current_temperature), Decimal(min(10.5, max(7.1, random.uniform(current_temperature-0.5, current_temperature+0.5))))],
                                            weights=[0.6, 0.4])[0], 1)
         current_temperature = float(temperature)
 
@@ -144,7 +144,7 @@ def WT_data():
             print(e)
 
         current_date_time_unique += increment
-        time.sleep(2)  # Simulate work
+        time.sleep(0.2)  # Simulate work
 
 def read_latest_data():
     global bird_detect  # Use the global variable
@@ -156,7 +156,7 @@ def read_latest_data():
     print(images)
 
     while(True):
-        bird_detect = random.choices([0,1], weights=[0.7, 0.3])[0]
+        bird_detect = random.choices([0,1], weights=[0.9, 0.1])[0]
         print(f"BirdDetect: {bird_detect}")
 
         if bird_detect:
@@ -197,7 +197,7 @@ def read_latest_data():
                 current_date = random_time_point.strftime("%Y-%m-%d")
                 current_timestamp = random_time_point.strftime('%H:%M:%S')
 
-                time.sleep(2.5)            
+                time.sleep(0.25)            
                 bird_detect = 0 
 
                 try: 
@@ -239,7 +239,7 @@ def read_latest_data():
                 print(f"Random Temperature: {temperature}")
                 print(f"Random Time: {random_time_point}")       
 
-        time.sleep(8)  # Simulate processing time
+        time.sleep(0.8)  # Simulate processing time
 
 # Start threads
 producer_thread = threading.Thread(target=WT_data)
