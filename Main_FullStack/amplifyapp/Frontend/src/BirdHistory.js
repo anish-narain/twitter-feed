@@ -4,6 +4,7 @@ import { withAuthenticator, View, Card } from "@aws-amplify/ui-react";
 import { useSelectedDate } from './SelectedDateContext'; // Import the context hook
 import DateSelector from './DateSelector'; // Ensure the path is correct
 import './App.css'; // Ensure you have this CSS file
+import Title from "./Title";
 
 function App() {
   const [images, setImages] = useState([]);
@@ -66,8 +67,9 @@ function App() {
         {images.map((image, index) => (
           image.ImageUrl && (
             <div key={selectedDate + index} className="image-item">
+              <Title>We predict this bird to be {image.BirdLabel}. We are {image.Accuracy}% sure.</Title>
               <img src={image.ImageUrl} alt={image.ImageFileName} className="image" />
-              <p className="image-info">Uploaded on: {image.UploadTimestamp}</p>
+              <p className="image-info">Uploaded at {image.UploadTimestamp}</p>
             </div>
           )
         ))}

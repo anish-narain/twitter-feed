@@ -8,6 +8,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Grid from "@mui/material/Grid";
 import FoodChart from "./FoodChart";
+import WeightDateSelector from "./WeightDateSelector";
 import Alert from "./Alert";
 import Title from "./Title";
 
@@ -21,6 +22,9 @@ const defaultTheme = createTheme({
 function Dashboard({ signOut }) {
   // State to store the latest weight data
   const [latestWeight, setLatestWeight] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(
+    new Date().toISOString().split("T")[0]
+  );
 
   useEffect(() => {
     // Fetch the latest weight data from the server
@@ -60,8 +64,17 @@ function Dashboard({ signOut }) {
             {/* Food Chart on the left */}
             <Grid item xs={12} md={8} lg={9}>
               <Card>
-                <CardContent style={{ height: '400px' }}>
-                  <FoodChart latestWeight={latestWeight} />
+                <CardContent>
+                  {/* Place the date selector here */}
+                  <WeightDateSelector onSelectDate={setSelectedDate} />
+                  <div style={{ height: "300px", marginTop: "20px" }}>
+                    {" "}
+                    {/* Adjust height as needed */}
+                    <FoodChart
+                      latestWeight={latestWeight}
+                      selectedDate={selectedDate}
+                    />
+                  </div>
                 </CardContent>
               </Card>
             </Grid>
