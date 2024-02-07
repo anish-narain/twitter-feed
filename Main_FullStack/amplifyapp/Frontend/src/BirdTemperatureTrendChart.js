@@ -9,16 +9,37 @@ function BirdTemperatureTrendChart({ selectedBird }) {
   const theme = useTheme();
   const [data, setData] = useState([]);
 
+  // Function to process and bin the temperature data
+  const processTemperatureData = (jsonData) => {
+    const temperatures = jsonData.map(item => parseFloat(item.temperature));
+    const minTemp = Math.min(...temperatures);
+    const maxTemp = Math.max(...temperatures);
+    const numBins = Math.ceil(Math.sqrt(temperatures.length)); // Number of bins based on square root heuristic
+    const binSize = (maxTemp - minTemp) / numBins;
+    const bins = {};
+
+    jsonData.forEach(item => {
+      const binIndex = Math.floor((parseFloat(item.temperature) - minTemp) / binSize);
+      const binKey = `${(minTemp + binIndex * binSize).toFixed(1)}-${(minTemp + (binIndex + 1) * binSize).toFixed(1)}`;
+
+      if (!bins[binKey]) {
+        bins[binKey] = { temperature: binKey, detections: 0 };
+      }
+      bins[binKey].detections += item.detections;
+    });
+
+    return Object.values(bins);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Adjust the endpoint URL and parameters as needed to match your API
         const response = await fetch(`http://localhost:5001/bird_temperature_trend/${selectedBird}`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const jsonData = await response.json();
-        setData(jsonData); // Assuming the API returns data in the correct format
+        setData(processTemperatureData(jsonData));
       } catch (error) {
         console.error('Failed to fetch bird temperature trend data:', error);
       }
@@ -27,7 +48,7 @@ function BirdTemperatureTrendChart({ selectedBird }) {
     if (selectedBird) {
       fetchData();
     }
-  }, [selectedBird]); // Re-fetch data when selectedBird changes
+  }, [selectedBird]);
 
   if (data.length === 0) {
     return <div>No data available for {selectedBird}.</div>;
@@ -47,7 +68,7 @@ function BirdTemperatureTrendChart({ selectedBird }) {
               bottom: 20,
             }}
           >
-            <XAxis dataKey="temperature" type="number" domain={['auto', 'auto']} label={{ value: 'Temperature (in degrees Celsius)', position: 'insideBottom', offset: -10 }} />
+            <XAxis dataKey="temperature" label={{ value: 'Temperature Range (in degrees Celsius)', position: 'insideBottom', offset: -10 }} />
             <YAxis label={{ value: 'Bird Detections', angle: -90, position: 'insideLeft' }} />
             <Tooltip />
             <Bar dataKey="detections" fill={theme.palette.primary.main} />
