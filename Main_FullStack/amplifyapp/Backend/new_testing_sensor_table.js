@@ -52,6 +52,41 @@ app.get("/images/:date", async (req, res) => {
   }
 });
 
+app.get('/bird_image_trend/:birdLabel', async (req, res) => {
+  const { birdLabel } = req.params; // Get the bird label from the URL parameter
+
+  const params = {
+    TableName: tableName,
+    FilterExpression: "BirdLabel = :birdLabel",
+    ExpressionAttributeValues: {
+      ":birdLabel": birdLabel,
+    },
+  };
+
+  try {
+    const data = await dynamodb.scan(params).promise();
+    // Filter out items without an ImageFileName or a BirdDetect value of 0
+    const imagesWithAccuracy = data.Items
+      .filter(item => item.BirdDetect === 1 && item.ImageFileName && item.Accuracy)
+      .map(item => ({
+        ...item,
+        ImageUrl: `${bucketUrl}/${item.ImageFileName}`
+      }));
+
+    // Sort by accuracy in descending order to get the image with the highest accuracy first
+    imagesWithAccuracy.sort((a, b) => b.Accuracy - a.Accuracy);
+
+    const highestAccuracyImage = imagesWithAccuracy[0] || null; // If there's no image, return null
+
+    res.json(highestAccuracyImage);
+    console.log(`HIGHEST ACCURACY IMAGE SENT FOR BIRD LABEL: ${birdLabel}`);
+  } catch (error) {
+    console.error("DynamoDB error:", error);
+    res.status(500).send(error.toString());
+  }
+});
+
+
 app.get('/bird_temperature_trend/:birdType', async (req, res) => {
   const { birdType } = req.params;
 

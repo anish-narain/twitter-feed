@@ -67,7 +67,7 @@ function App() {
         {images.map((image, index) => (
           image.ImageUrl && (
             <div key={selectedDate + index} className="image-item">
-              <Title>We predict this bird to be {image.BirdLabel}. We are {image.Accuracy}% sure.</Title>
+              <Title>We predict this bird to be {image.BirdLabel}. We are {parseFloat(image.Accuracy).toFixed(2)}% sure.</Title>
               <img src={image.ImageUrl} alt={image.ImageFileName} className="image" />
               <p className="image-info">Uploaded at {image.UploadTimestamp}</p>
             </div>
