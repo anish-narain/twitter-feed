@@ -1,4 +1,4 @@
-# Twitter
+# twitter feed
 
 
 ## Camera part:
