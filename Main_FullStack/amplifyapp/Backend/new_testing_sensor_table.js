@@ -15,6 +15,13 @@ const tableName = "Twitter_Table_New";
 const bucketUrl = "https://twitterbirdbucket.s3.amazonaws.com";
 
 app.use(cors());
+app.use(express.json()); 
+
+app.post('/user-details', async (req, res) => {
+  const { userId } = req.body; // Extracting userId sent from the client
+  console.log(`Received user ID: ${userId}`); // Logging the user ID
+  res.status(200).send({ message: 'User ID received' });
+});
 
 app.get("/images/:date", async (req, res) => {
   const { date } = req.params; // Get the date from the URL parameter
