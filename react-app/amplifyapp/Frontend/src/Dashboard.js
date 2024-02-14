@@ -3,16 +3,15 @@ Main Dashboard Page:
 1. Show for bird detection chart across 3 hour ranges
 2. Show all bird images with predicted labels within selected date
 3. Main page and handle connect and log out
-4. Manage to send userId and Serial number from AWS amplify authenticator to database
+4. Manage to get and send userId and Serial number from AWS amplify authenticator to database
 */
 
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import "@aws-amplify/ui-react/styles.css";
 import { Authenticator, Button } from "@aws-amplify/ui-react";
-import { signIn, signOut } from 'aws-amplify/auth';
+import {signOut } from 'aws-amplify/auth';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
-import { Auth } from 'aws-amplify';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
@@ -21,43 +20,20 @@ import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import { Tab, Tabs } from '@mui/material'; // Import Tabs and Tab components
-import Chart from './Chart';
-import Visits from './Visits';
 import logo from './logo.png';
-import BirdHistory from './BirdHistory';
 import BirdTrendsPage from './BirdTrendsPage'; // Replace with actual file name
 import FoodAlertsPage from './FoodAlertsPage'; // Replace with actual file name
-import FlutterDashIcon from '@mui/icons-material/FlutterDash';
 import ConditionalComponents from './ConditionalComponents'; // Import the new component
 import { getCurrentUser, fetchUserAttributes } from 'aws-amplify/auth';
-import { UserProvider } from './UserContext'; // Import UserProvider
 import { useUser } from './UserContext';
-import { Hub } from 'aws-amplify/utils';
 
 
 
 const drawerWidth = 240;
-
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
@@ -107,7 +83,6 @@ const defaultTheme = createTheme({
   typography: {
     fontFamily: "'Lilita One', cursive",
   },
-  // ... other theme settings
 });
 
 
@@ -155,7 +130,6 @@ const formFields = {
 
 
 function Dashboard() {
-  // Existing Dashboard state and functions
   const [open, setOpen] = useState(true);
   const [value, setValue] = useState(0);
   const { userDetails, setUserDetails } = useUser();
@@ -164,20 +138,16 @@ function Dashboard() {
 
   const handleSignIn = async () => {
     try {
-
-      //await signIn(); // Assuming this is a placeholder for your actual sign-in logic
+      // refresh the page after sign in for updating serial_number using Connect Button
       window.location.reload();
-      //setIsSignedIn(true); // Update state to reflect sign-in
-      // Refresh the page after successful sign in
     } catch (error) {
       console.error('Error signing in: ', error);
     }
   };
 
   const handleSignOut = async () => {
+    // when clicking signout button, clear current serial_number and userId to null
     try {
-      //await signIn(); // Assuming this is a placeholder for your actual sign-in logic
-
       const userDetails = {
         userId: null,
         serial_number: null,
@@ -192,10 +162,8 @@ function Dashboard() {
         body: JSON.stringify(userDetails),
       });
 
+      // sign out
       await signOut();
-      //window.location.reload();
-      //setIsSignedIn(true); // Update state to reflect sign-in
-      // Refresh the page after successful sign in
     } catch (error) {
       console.error('Error signing in: ', error);
     }
@@ -205,22 +173,21 @@ function Dashboard() {
   useEffect(() => {
     async function fetchCurrentUser() {
       try {
+        // get username and userId from authenticator
         const { username, userId, signInDetails } = await getCurrentUser();
-
+        
+        // get serial_number stored under nickname from authenticator
         const attributes1 = await fetchUserAttributes();
-        const serial_number = attributes1.nickname; // assuming email is required by fetchUserAttributes()
+        const serial_number = attributes1.nickname; 
 
         if (serial_number) {
           const userDetails = {
             userId: username,
-            serial_number: attributes1.nickname, // assuming email is required by fetchUserAttributes()
-            //email: attributes1.email
-            // other attributes as needed
+            serial_number: attributes1.nickname, 
           };
           setUserDetails(userDetails)
 
-          //setUserDetails({ username, userId, signInDetails }); // This will now correctly update the state
-          // Send the userId to the server
+          // Send the userID, serial_number to the server
           await fetch('http://localhost:5001/user-details', {
             method: 'POST',
             headers: {
@@ -242,7 +209,7 @@ function Dashboard() {
     <Authenticator formFields={formFields}>
       {({ signOut, user }) => (
         <ThemeProvider theme={defaultTheme}>
-          <Router> {/* Move Router to wrap the entire app */}
+          <Router> 
             <Box sx={{ display: 'flex' }}>
               <CssBaseline />
               <AppBar position="absolute" open={open}>
@@ -276,7 +243,7 @@ function Dashboard() {
                     variant="body1"
                     color="inherit"
                     noWrap
-                    sx={{ marginRight: '20px' }} // Adjust spacing as needed
+                    sx={{ marginRight: '20px' }}
                   >
                     {userDetails?.serial_number ? userDetails.userId : 'Not Connected'}
                   </Typography>
@@ -308,7 +275,7 @@ function Dashboard() {
                   <Tab label="Dashboard" component={Link} to="/Dashboard" />
                   <Tab label="Bird Trends" component={Link} to="/BirdTrendsPage" />
                   <Tab label="Food Alerts" component={Link} to="/FoodAlertsPage" />
-                  {/* Add more tabs as needed */}
+                  
                 </Tabs>
               </Drawer>
               <Box
@@ -325,11 +292,10 @@ function Dashboard() {
               >
                 <Toolbar />
                 <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                  <ConditionalComponents /> { }
+                  <ConditionalComponents />
                   <Routes>
                     <Route path="/BirdTrendsPage" element={<BirdTrendsPage />} />
                     <Route path="/FoodAlertsPage" element={<FoodAlertsPage />} />
-                    { }
                   </Routes>
                 </Container>
                 <Toolbar />
@@ -337,7 +303,7 @@ function Dashboard() {
                 </Container>
               </Box>
             </Box>
-          </Router> { }
+          </Router>
         </ThemeProvider>
       )}
     </Authenticator>
