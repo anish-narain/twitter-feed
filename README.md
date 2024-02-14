@@ -7,9 +7,9 @@ The promotional website for the product can be found [here](https://riyachard.wi
 
 ## Rasberry Pi:
 
-Contains the code running on the Rasberry Pi, there are two data upload file, actual and fake:
+Contains the code running on the Rasberry Pi, there are two files:
 
-### Actual Data Upload `new_actual_upload.py`
+### upload`
 The Actual Data Upload Pipeline is in a single super loop, with `time` function handling faster and slower procedure. We used a super loop as it had little impact on latency. The bird detection sensor is constantly checking if a bird visists while the food weight and temperature sensor send the data every 5 seconds to the server for monitoring the change in data.
 
 We did try to separate the faster and slower features into two separate threads. However, it seems like the the two weight data sensors are communicating to the same I2C ADC chips, so the data cannot be send in parallel.
@@ -22,7 +22,7 @@ We did try to separate the faster and slower features into two separate threads.
 
 **Temperature Sensor** `tempSensor.py` 
 
-### Fake Data Upload `new_fake_upload.py`
+### populating-dynamo-db`
 The Fake Data Upload Pipeline runs in two separate threads. The main thread handles bird detection in real time with weight and temperature data and another thread handles weight and temperature upload every 5 minutes.
 
 The following random generators produce some kind of "fake real" weight and temperature data:
