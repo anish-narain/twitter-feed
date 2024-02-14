@@ -8,7 +8,7 @@ import Typography from "@mui/material/Typography";
 import Title from "./Title";
 
 function Alert({ latestWeight }) {
-  const weightThreshold = 500; // Set the weight threshold for the alert
+  const weightThreshold = 30; // Set the weight threshold for the alert
   const isLowFood = latestWeight < weightThreshold;
 
   return (

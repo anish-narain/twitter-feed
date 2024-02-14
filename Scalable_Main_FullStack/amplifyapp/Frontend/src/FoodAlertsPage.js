@@ -61,7 +61,7 @@ function Dashboard({ signOut }) {
     // Depending on how often we want to fetch the latest data below is an interval to fetch every minute
     // const interval = setInterval(fetchLatestWeightData, 60000);
     // return () => clearInterval(interval);
-  }, []);
+  }, [selectedDate]);
 
   return (
     <ThemeProvider theme={defaultTheme}>

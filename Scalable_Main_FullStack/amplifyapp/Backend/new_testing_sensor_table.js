@@ -303,9 +303,9 @@ const getCurrentDate = () => {
 
 //------------------------------------------------------------------------------
 app.get("/weight-today/:serial_number", async (req, res) => {
-  const today = "2024-01-04";  // Use a fixed date for demonstration
+  //const today = "2024-01-04";  // Use a fixed date for demonstration
   const { serial_number} = req.params;
-  //const today = getCurrentDate();  
+  const today = getCurrentDate();  
 
   const params = {
     TableName: tableName,
