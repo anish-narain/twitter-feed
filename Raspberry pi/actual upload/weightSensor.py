@@ -79,6 +79,7 @@ def measure2_g(sensorObject): # Returns weight reading froms sensor 2 in grams
     sensorObject.setConfig("011", "111", "0", write=True) # Set to measure AN1 - AN2, with max gain.
 
     total = 0
+    samples = 25
     for i in range(int(samples)):
         total += sensorObject.read()
 
@@ -89,22 +90,25 @@ def measure2_g(sensorObject): # Returns weight reading froms sensor 2 in grams
 
 # calibrate ######################################
 cal_sensor1_0, cal_sensor1_weight, cal_sensor2_0, cal_sensor2_weight = 0, 0, 0, 0
-def calibrateSensors(sensorObject, mass): # Calibrates sensors with known mass to measure weight
+def calibrateSensors(sensorObject, mass, mass2=0): # Calibrates sensors with known mass to measure weight
     global cal_sensor1_0, cal_sensor1_weight, cal_sensor2_0, cal_sensor2_weight
     samples = 200
+
+    if mass2 == 0:  # Can specify different calibration mass for sensor 2
+        mass2 = mass
 
     input("Sensor 1 (amp, left, bird weight): ENTER to calibrate 0g: ")
     total_0 = 0
     for i in range(int(samples)):
         total_0 += sensorObject.read()
-    cal_sensor1_0 = total_0 / float(samples)
+    cal_sensor1_0 = total_0 / float(samples) # Average ADC value with no load
 
     input(f"Sensor 1 (amp, left, bird weight): ENTER to calibrate {mass}g: ")
     total_40 = 0
     for i in range(int(samples)):
         total_40 += sensorObject.read()
-    cal_40 = total_40 / float(samples)
-    cal_sensor1_weight = (cal_40 - cal_sensor1_0) / float(mass)
+    cal_40 = total_40 / float(samples)  # Average ADC value with known mass
+    cal_sensor1_weight = (cal_40 - cal_sensor1_0) / float(mass) # Works out the equivalent mass in grams for a change in ADC value of 1
 
     sensorObject.setConfig("011", "111", "0", write=True) # Set to measure AN1 - AN2, with max gain.
 
@@ -114,26 +118,25 @@ def calibrateSensors(sensorObject, mass): # Calibrates sensors with known mass t
         total_0 += sensorObject.read()
     cal_sensor2_0 = total_0 / float(samples)
 
-    input(f"Sensor 2 (right, food weight): ENTER to calibrate {mass}g: ")
+    input(f"Sensor 2 (right, food weight): ENTER to calibrate {mass2}g: ")
     total_40 = 0
     for i in range(int(samples)):
         total_40 += sensorObject.read()
     cal_40 = total_40 / float(samples)
-    cal_sensor2_weight = (cal_40 - cal_sensor2_0) / float(mass)
+    cal_sensor2_weight = (cal_40 - cal_sensor2_0) / float(mass2)
 
     sensorObject.setConfig("100", "001", "0", write=True) # Set to default measurement
 
     print("Done")
-    ##################################################
+##################################################
 
 if keepCamera:
     camera = PiCamera()
+    camera.rotation = 180
 
 lastSamples = [] # List of previous n weight samples
 lastDetect = 0 # Time of last detection
 samples = 25 # No of samples to take per reading
-
-
 
 def loop(sensorObject, threshold): # Constantly check sensor to see if a bird has landed, and take a photo if it has. Threshold = increase in weight required to detect bird (ADC value, not in grams).
     global lastSamples, lastDetect, samples, cal_sensor1_0, cal_sensor1_weight
@@ -149,7 +152,7 @@ def loop(sensorObject, threshold): # Constantly check sensor to see if a bird ha
     w_g = ((total / float(samples)) - cal_sensor1_0) / float(cal_sensor1_weight) # Weight in grams
 
     lastSamples.append(w)
-    if len(lastSamples) > 50: # Stores last n samples
+    if len(lastSamples) > 10: # Stores last n samples
         lastSamples.pop(0)
     last_avg = sum(lastSamples) / float(len(lastSamples)) # Average of last n samples
 
@@ -165,7 +168,6 @@ def loop(sensorObject, threshold): # Constantly check sensor to see if a bird ha
 
             print("Detected")
             detected = True
-            
 
             image_file_name = "Image_"+ current_date_time_unique.isoformat()+".jpg"   # fake image file name, has to be unique!!!
             file_path = os.path.join(data_file_folder, image_file_name)
@@ -175,6 +177,7 @@ def loop(sensorObject, threshold): # Constantly check sensor to see if a bird ha
                 camera.capture(file_path)
             else:
                 with PiCamera() as camera:
+                    camera.rotation = 180
                     camera.capture(file_path)
             #time.sleep(0.5)
         
@@ -189,6 +192,7 @@ if __name__ == "__main__":
     weight1 = ADC(0x48, i2c_bus)
     weight1.setConfig("100", "001", "0", write=True) # Set voltage range to smallest, i.e. most sensitive. No need to write new config as it will be done when reading ADC.
 
-    calibrateSensors(weight1)
+    calibrateSensors(weight1, mass=100, mass2=369)
     while True:
-        loop(weight1)
+        d = loop(weight1, 50)
+        print(d[0], d[1], measure2_g(weight1))
