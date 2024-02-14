@@ -65,6 +65,9 @@ Good performance on Internet images, becuase the network is trained on those ima
 ## AWS Database
 1. Twitter_Table_New: stores all the data
 
+<img width="1277" alt="image" src="https://github.com/anish-narain/twitter-feed/assets/69715492/c186ae9b-0a63-46da-bddc-04042a2ead7b">
+
+
 2. Twitter_User_Table: binds user_id and bird_feeder's serial number
 
 
