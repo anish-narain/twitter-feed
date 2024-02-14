@@ -79,7 +79,7 @@ def measure2_g(sensorObject): # Returns weight reading froms sensor 2 in grams
     sensorObject.setConfig("011", "111", "0", write=True) # Set to measure AN1 - AN2, with max gain.
 
     total = 0
-    samples = 50
+    samples = 25
     for i in range(int(samples)):
         total += sensorObject.read()
 
@@ -128,7 +128,7 @@ def calibrateSensors(sensorObject, mass, mass2=0): # Calibrates sensors with kno
     sensorObject.setConfig("100", "001", "0", write=True) # Set to default measurement
 
     print("Done")
-    ##################################################
+##################################################
 
 if keepCamera:
     camera = PiCamera()
