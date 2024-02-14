@@ -105,7 +105,7 @@ def bird_detect_fn():
                 current_timestamp = capture_time.strftime('%H:%M:%S')
 
                 # Get weight and temperature
-                weight_food = weightSensor.measure2_g(weight1)
+                weight_food = weightSensor.measure2_g(weight1) - w_g - 369 # Measure total weight (sensor 2), then subtract weight of bird and physical assembly
                 temperature = tempSensor.readTemp(i2c_bus)
 
                 time.sleep(0.1)
@@ -141,7 +141,9 @@ def bird_detect_fn():
         if current_time - last_update_time >= 5:
             try:
                 # Get weight and temperature
-                weight_food = weightSensor.measure2_g(weight1)
+                weight_food = weightSensor.measure2_g(weight1) - 369
+                if w_g > 50:
+                    weight_food -= w_g
                 temperature = tempSensor.readTemp(i2c_bus)
                 time.sleep(0.1)
 
