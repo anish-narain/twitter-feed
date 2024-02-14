@@ -5,13 +5,16 @@ Twitter Feed is an `IOT device` using sensors, `AWS`, `Node.js` and `React`. Twi
 
 The promotional website for the product can be found [here](https://riyachard.wixsite.com/twitterfeed)
 
-### Sensors:
+## Rasberry Pi:
 
-**Camera**
-* A baseline for uploading random jpg image to S3 bucket (image storage AWS database) is estalished
-* We established, a dynamodb database for storing time of upload(time of detection of birds) and file name
-* A proper way of extracting the dynamodb information to node.js is created, with a proper image url and timestamp
-* A rough display is made in react to display the images according to timestamp order
+Contains the code running on the Rasberry Pi, there are two data upload file, actual and fake:
+
+### Actual Data Upload `new_actual_upload.py`
+The Actual Data Upload Pipeline is in a single super loop, with `time` function handling faster and slower procedure. We used a super loop as it had little impact on latency. The bird detection sensor is constantly checking if a bird visists while the food weight and temperature sensor send the data every 5 seconds to the server for monitoring the change in data.
+
+We did try to separate the faster and slower features into two separate threads. However, it seems like the the two weight data sensors are communicating to the same I2C ADC chips, so the data cannot be send in parallel.
+
+**Main** `Main.py` 
 
 **Weight Sensor** `weightSensor.py`   
 * Two weight sensors: food weight and bird detection
@@ -19,15 +22,7 @@ The promotional website for the product can be found [here](https://riyachard.wi
 
 **Temperature Sensor** `tempSensor.py` 
 
-### Data Upload
-There are two data upload file, actual and fake:
-
-**Actual Data Upload** `new_actual_upload.py`
-The Actual Data Upload Pipeline is in a single super loop, with `time` function handling faster and slower procedure. We used a super loop as it had little impact on latency. The bird detection sensor is constantly checking if a bird visists while the food weight and temperature sensor send the data every 5 seconds to the server for monitoring the change in data.
-
-We did try to separate the faster and slower features into two separate threads. However, it seems like the the two weight data sensors are communicating to the same I2C ADC chips, so the data cannot be send in parallel.
-
-**Fake Data Upload** `new_fake_upload.py`
+### Fake Data Upload `new_fake_upload.py`
 The Fake Data Upload Pipeline runs in two separate threads. The main thread handles bird detection in real time with weight and temperature data and another thread handles weight and temperature upload every 5 minutes.
 
 The following random generators produce some kind of "fake real" weight and temperature data:
