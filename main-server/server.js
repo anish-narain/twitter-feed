@@ -18,16 +18,16 @@ const bucketUrl = "https://twitterbirdbucket.s3.amazonaws.com";
 app.use(cors());
 app.use(express.json()); 
 
+// Update user details (e.g., serial number) in the database
 app.post('/user-details', async (req, res) => {
-  const { userId, serial_number} = req.body; // Extracting userId sent from the client
-  console.log(`Received user ID: ${userId}`); // Logging the user ID
+  const { userId, serial_number} = req.body; 
+  console.log(`Received user ID: ${userId}`); 
   console.log(`Serial Number is : ${serial_number}`);
-  // Check if userId and nickname are not null
   if (userId && serial_number) {
     const params = {
       TableName: usertable,
       Key: {
-        userId: userId, // Assuming 'userId' is the name of your primary key attribute
+        userId: userId, 
       },
       UpdateExpression: "set serial_number = :n",
       ExpressionAttributeValues: {
@@ -50,8 +50,9 @@ app.post('/user-details', async (req, res) => {
   }
 });
 
+// Retrieve and send sorted images for a given serial number and date, including URL construction for images
 app.get("/images/:serial_number/:date", async (req, res) => {
-  const {serial_number, date} = req.params; // Get the date from the URL parameter'
+  const {serial_number, date} = req.params; 
   //serial_number = 'AA123456'
   console.log(serial_number)
 
@@ -72,12 +73,11 @@ app.get("/images/:serial_number/:date", async (req, res) => {
         ImageUrl: item.BirdDetect && item.ImageFileName ? `${bucketUrl}/${item.ImageFileName}` : null,
         //ImageUrl: item.ImageFileName ? `${bucketUrl}/${item.ImageFileName}` : null,
       }))
-      .filter((item) => item.ImageUrl) // Filter out items without an ImageUrl
+      .filter((item) => item.ImageUrl) 
       .sort((a, b) => {
         // Assuming UploadTimestamp is in the format 'HH:MM:SS'
         const timeA = a.UploadTimestamp.split(':').map(Number);
         const timeB = b.UploadTimestamp.split(':').map(Number);
-        // Convert hours and minutes to seconds and add them up to compare
         return timeA[0] * 3600 + timeA[1] * 60 + timeA[2] - (timeB[0] * 3600 + timeB[1] * 60 + timeB[2]);
       });
 
@@ -89,8 +89,9 @@ app.get("/images/:serial_number/:date", async (req, res) => {
   }
 });
 
+// Retrieve and send the image with the highest accuracy for a given bird label and serial number
 app.get('/bird_image_trend/:serial_number/:birdLabel', async (req, res) => {
-  const { serial_number, birdLabel } = req.params; // Get the bird label from the URL parameter
+  const { serial_number, birdLabel } = req.params; 
 
   const params = {
     TableName: tableName,
@@ -103,7 +104,6 @@ app.get('/bird_image_trend/:serial_number/:birdLabel', async (req, res) => {
 
   try {
     const data = await dynamodb.scan(params).promise();
-    // Filter out items without an ImageFileName or a BirdDetect value of 0
     const imagesWithAccuracy = data.Items
       .filter(item => item.BirdDetect === 1 && item.ImageFileName && item.Accuracy)
       .map(item => ({
@@ -111,10 +111,9 @@ app.get('/bird_image_trend/:serial_number/:birdLabel', async (req, res) => {
         ImageUrl: `${bucketUrl}/${item.ImageFileName}`
       }));
 
-    // Sort by accuracy in descending order to get the image with the highest accuracy first
     imagesWithAccuracy.sort((a, b) => b.Accuracy - a.Accuracy);
 
-    const highestAccuracyImage = imagesWithAccuracy[0] || null; // If there's no image, return null
+    const highestAccuracyImage = imagesWithAccuracy[0] || null; 
 
     res.json(highestAccuracyImage);
   } catch (error) {
@@ -124,7 +123,7 @@ app.get('/bird_image_trend/:serial_number/:birdLabel', async (req, res) => {
 });
 
 //-----------------------------------------------------------------------------------------
-
+// Send trend data of bird detections against temperature for a given bird type and serial number
 app.get('/bird_temperature_trend/:serial_number/:birdType', async (req, res) => {
   const { serial_number, birdType } = req.params;
 
@@ -143,11 +142,9 @@ app.get('/bird_temperature_trend/:serial_number/:birdType', async (req, res) => 
     const temperatureTrendData = {};
 
     data.Items.forEach((item) => {
-      // Check if Temperature is defined before accessing its value
-      const temp = item.Temperature?.toString(); // Use optional chaining operator
+      const temp = item.Temperature?.toString(); 
 
       if (!temp) {
-        // Skip this item if Temperature is undefined
         return;
       }
 
@@ -173,6 +170,7 @@ app.get('/bird_temperature_trend/:serial_number/:birdType', async (req, res) => 
   }
 });
 
+// Send trend data of bird detections over time (hourly bins) for a given bird type and serial number
 app.get('/bird_time_trend/:serial_number/:birdType', async (req, res) => {
   const { serial_number, birdType } = req.params;
 
@@ -189,12 +187,11 @@ app.get('/bird_time_trend/:serial_number/:birdType', async (req, res) => {
     const data = await dynamodb.scan(params).promise();
 
     const timeTrendData = {};
-    // Example time binning logic (adjust based on desired intervals)
     data.Items.forEach((item) => {
       if (item.BirdDetect === 1) {
         const timestamp = new Date(item.UploadDateTimeUnique);
         const hour = timestamp.getHours();
-        const timeBin = `${String(hour).padStart(2, '0')}:00`; // Hourly bins
+        const timeBin = `${String(hour).padStart(2, '0')}:00`; 
 
         if (!timeTrendData[timeBin]) {
           timeTrendData[timeBin] = { time: timeBin, detections: 0 };
@@ -212,9 +209,9 @@ app.get('/bird_time_trend/:serial_number/:birdType', async (req, res) => {
   }
 });
 
-
+// Count and send the number of bird detections for a single date and serial number
 app.get('/bird_detect_single_date/:serial_number/:date', async (req, res) => {
-  const { serial_number, date } = req.params; // Get the date from the URL parameter
+  const { serial_number, date } = req.params; 
 
   const params = {
     TableName: tableName,
@@ -241,8 +238,9 @@ app.get('/bird_detect_single_date/:serial_number/:date', async (req, res) => {
   }
 });
 
+// Retrieve and send bird detections count segmented into 3-hour blocks for a given date and serial number
 app.get('/bird_detections_chart/:serial_number/:date', async (req, res) => {
-  const { serial_number, date } = req.params; // Get the date from the URL parameter
+  const { serial_number, date } = req.params;
 
   const params = {
     TableName: tableName,
@@ -271,15 +269,10 @@ app.get('/bird_detections_chart/:serial_number/:date', async (req, res) => {
     // Process each item
     data.Items.forEach(item => {
       if (item.BirdDetect === 1) {
-        // Combine UploadDate and UploadTimestamp to create a full date-time string
         const fullDateTimeString = `${item.UploadDate}T${item.UploadTimestamp}`;
-        // Create a Date object from the full date-time string
         const dateObject = new Date(fullDateTimeString);
-        // Extract the hour from the Date object
         const hour = dateObject.getHours();
-        // Determine the 3-hour block
         const block = `${String(Math.floor(hour / 3) * 3).padStart(2, '0')}:00`;
-        // Increment the count for the corresponding block
         birdDetectionsByBlock[block]++;
       }
     });
@@ -297,11 +290,11 @@ app.get('/bird_detections_chart/:serial_number/:date', async (req, res) => {
 
 const getCurrentDate = () => {
   const now = new Date();
-  return now.toISOString().split("T")[0]; // returns date in YYYY-MM-DD format
+  return now.toISOString().split("T")[0];
 };
 
-
 //------------------------------------------------------------------------------
+// Retrieve and send the weight data for the current date for a given serial number
 app.get("/weight-today/:serial_number", async (req, res) => {
   //const today = "2024-01-04";  // Use a fixed date for demonstration
   const { serial_number} = req.params;
@@ -320,12 +313,11 @@ app.get("/weight-today/:serial_number", async (req, res) => {
     const data = await dynamodb.scan(params).promise();
     const weightData = data.Items
       .map((item) => ({
-        // Send the time as a timestamp (number of milliseconds since the Unix epoch)
         time: new Date(item.UploadDateTimeUnique).getTime(),
         amount: item.FoodWeight,
       }))
-      .filter((item) => item.amount) // Filter out any items without weight
-      .sort((a, b) => a.time - b.time); // Sort the data based on the timestamp
+      .filter((item) => item.amount) 
+      .sort((a, b) => a.time - b.time); 
 
     // Send the sorted data
     res.json(weightData);
@@ -338,7 +330,7 @@ app.get("/weight-today/:serial_number", async (req, res) => {
 });
 
 //------------------------------------------------------------------------------------------------------------
-
+// Retrieve and send the weight data for a specified date and serial number
 app.get("/weight-on-date/:serial_number/:date", async (req, res) => {
   const { serial_number, date } = req.params;
   
@@ -355,12 +347,11 @@ app.get("/weight-on-date/:serial_number/:date", async (req, res) => {
     const data = await dynamodb.scan(params).promise();
     const weightData = data.Items
       .map((item) => ({
-        // Send the time as a timestamp (number of milliseconds since the Unix epoch)
         time: new Date(item.UploadDateTimeUnique).getTime(),
         amount: item.FoodWeight,
       }))
-      .filter((item) => item.amount) // Filter out any items without weight
-      .sort((a, b) => a.time - b.time); // Sort the data based on the timestamp
+      .filter((item) => item.amount) 
+      .sort((a, b) => a.time - b.time);
 
     // Send the sorted data
     res.json(weightData);
@@ -373,6 +364,7 @@ app.get("/weight-on-date/:serial_number/:date", async (req, res) => {
 
 
 //------------------------------------------------------------------------
+// Retrieve and send a list of unique bird labels detected for a given serial number
 app.get('/unique-bird-labels/:serial_number', async (req, res) => {
   const { serial_number } = req.params;
   const params = {
@@ -385,7 +377,6 @@ app.get('/unique-bird-labels/:serial_number', async (req, res) => {
   };
   try {
     const data = await dynamodb.scan(params).promise();
-    // Extract unique labels and sort them
     const labels = [...new Set(data.Items.map(item => item.BirdLabel))].sort();
     console.log(`Unique Bird Labels Sent`);
     res.json(labels);
@@ -396,7 +387,7 @@ app.get('/unique-bird-labels/:serial_number', async (req, res) => {
 });
 
 
-
+// Retrieve and send all data
 app.get('/data/:serial_number/:date', async (req, res) => {
   const { serial_number, date } = req.params;
 
@@ -435,6 +426,7 @@ app.get('/data/:serial_number/:date', async (req, res) => {
   }
 });
 
+// Starts the server and listens on a specified port
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
