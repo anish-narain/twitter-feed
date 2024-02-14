@@ -1,3 +1,5 @@
+<img width="250" alt="image" src="https://github.com/anish-narain/twitter-feed/assets/69715492/ae4c6892-212c-4b61-b6ec-3f0d78a7c95f">
+
 # Twitter Feed
 Twitter Feed is an **IOT device** using sensors, **AWS**, **Node.js** and **React**. Twitter Feed is a smart bird feeder that can **seamlessly detect the presence of birds using a dedicated weight sensor**, and simultaneously **take a picture that can be stored in an interactive web app**. 
 * Twitter Feed can **predict the breed of bird** from the picture to various degrees of accuracy using a trained ML model and present data from previous days in dynamic graphs.
@@ -61,13 +63,10 @@ The server code structured to process the data in a queue and asynchronously run
 Good performance on Internet images, becuase the network is trained on those images, with over 95% of accuracy. **Poor performance on actual images taken from the bird feeder. Could retrained a network based on the actual images to improve performance.**
 
 ## AWS Database
-1. Twitter_Table_New: stores all data
+1. Twitter_Table_New: stores all the data
 
-![alt text](image.png)
+2. Twitter_User_Table: binds user_id and bird_feeder's serial number
 
 
-2. Twitter_User_Table: bind user_id and bird_feeder's serial number
 
-#
 
-![alt text](image-1.png)
