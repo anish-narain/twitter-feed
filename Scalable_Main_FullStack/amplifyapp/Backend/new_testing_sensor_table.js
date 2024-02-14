@@ -303,9 +303,9 @@ const getCurrentDate = () => {
 
 //------------------------------------------------------------------------------
 app.get("/weight-today/:serial_number", async (req, res) => {
-  //const today = "2022-02-03";  // Use a fixed date for demonstration
+  const today = "2024-01-04";  // Use a fixed date for demonstration
   const { serial_number} = req.params;
-  const today = getCurrentDate();  
+  //const today = getCurrentDate();  
 
   const params = {
     TableName: tableName,
@@ -329,6 +329,7 @@ app.get("/weight-today/:serial_number", async (req, res) => {
 
     // Send the sorted data
     res.json(weightData);
+    console.log(weightData);
     console.log(`WEIGHT DATA SENT FOR TODAY: ${today}`);
   } catch (error) {
     console.error("DynamoDB error:", error);
