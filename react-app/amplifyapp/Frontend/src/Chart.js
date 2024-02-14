@@ -1,6 +1,5 @@
 /*
-Create bird detection chart in the Dashboard Tab 
-with bird detection count in every 3 hour range
+Create bird detection chart in the Dashboard Tab with bird detection count in every 3 hour range
 */
 
 import * as React from 'react';

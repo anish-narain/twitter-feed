@@ -5,7 +5,7 @@ Produce captions with predicted labels and accuracy for each bird images
 import React from "react";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
-import Title from "./Title"; // Assuming Title is a component you've defined similar to in TrendAlert.js
+import Title from "./Title"; 
 
 const BirdImageCard = ({ birdImage, birdLabel }) => {
   return (
