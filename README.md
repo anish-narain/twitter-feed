@@ -1,14 +1,20 @@
 # Twitter Feed
-Twitter Feed is an `IOT device` using sensors, `AWS`, `Node.js` and `React`. Twitter Feed is a smart bird feeder that can `seamlessly detect the presence of birds using a dedicated weight sensor`, and simultaneously `take a picture that can be stored in an interactive web app`. Additionally, Twitter Feed can `predict the breed of bird` from the picture to various degrees of accuary using a trained ML model and present data from previous days in a dynamic graphs. Twitter Feed also `tracks the weight of your bird feed` at 5 second intervals and alerts you when food is below 50g. Twitter Feed keeps a `history of the time of day and temperature (using a temperature sensor) of when each breed is detected`, so you can have the best chance of seeing the bird in person. Finally, Twitter Feed uses a secure `AWS authentification system` where each user logs in with a unique username and password (with secure communication using AWS secret keys). `Multiple users` can be registered on one Twitter Feeder, and a `single user can access multiple feeders` in different locations by entering the Bird Feeder Serial ID when accessing the webapp, allowing for scalability. 
+Twitter Feed is an **IOT device** using sensors, **AWS**, **Node.js** and **React**. Twitter Feed is a smart bird feeder that can **seamlessly detect the presence of birds using a dedicated weight sensor**, and simultaneously **take a picture that can be stored in an interactive web app**. 
+* Twitter Feed can **predict the breed of bird** from the picture to various degrees of accuracy using a trained ML model and present data from previous days in dynamic graphs. * Twitter Feed also **tracks the weight of your bird feed** at 5-second intervals and alerts you when food is below 50g.
+* Twitter Feed keeps a **history of the time of day and temperature (using a temperature sensor) of when each breed is detected**, so you can have the best chance of seeing the bird in person.
+* Twitter Feed uses a secure **AWS authentication system** where each user logs in with a unique username and password (with secure communication using AWS secret keys). **Multiple users** can be registered on one Twitter Feeder, and a **single user can access multiple feeders** in different locations by entering the Bird Feeder Serial ID when accessing the web app, allowing for scalability.
+
 
 ## Website
 
 The promotional website for the product can be found [here](https://riyachard.wixsite.com/twitterfeed)
 
 ## Running the code:
-server code: run `inference_server_code_queue.py` on ec2 instance with `bird_model_copy.py` a must dependency.
+Server code: To run the prediction server which identifies the bird breeds, run `python3 prediction-server.py` on ec2 instance with `bird_model.py` as the dependency in the `bird-recognition-server/server` folder. The main server which interfaces with the DynamoDB table, S3 bucket and React app is in the `main-server` folder. It also runs on an ec2 instance and can be run using `node server.js` 
 
-client code: `new_fake_upload.py` or `new_actual_upload.py` call the server code to make predictions
+Web-app code: 
+
+Client code: `new_fake_upload.py` or `new_actual_upload.py` call the server code to make predictions 
 
 ## Main Server 
 The main server handles requests from client App and filter the Database Table and send back the requested data to client App. For all features, please check the description in file `new_testing_sensor_table.js`.
