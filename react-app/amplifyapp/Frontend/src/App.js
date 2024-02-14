@@ -1,7 +1,5 @@
 /*
-Wrap Context Provider to Dashboard. 
-The two context provider share selected date 
-and serial number across all .js files
+Top Level Web App Code
 */
 
 import React, { useState, useEffect } from 'react';

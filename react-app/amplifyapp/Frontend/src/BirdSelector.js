@@ -1,5 +1,5 @@
 /*
-Fetch bird labels from database
+Fetch bird labels from database to add to dropdown for bird trends page.
 */
 
 import React, { useState, useEffect } from 'react';

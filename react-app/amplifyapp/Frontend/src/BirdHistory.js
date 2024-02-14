@@ -7,9 +7,9 @@ and show all images in Dashboard Tab
 import React, { useState, useEffect } from 'react';
 import "@aws-amplify/ui-react/styles.css";
 import { withAuthenticator, View, Card } from "@aws-amplify/ui-react";
-import { useSelectedDate } from './SelectedDateContext'; // Import the context hook
-import DateSelector from './DateSelector'; // Ensure the path is correct
-import './App.css'; // Ensure you have this CSS file
+import { useSelectedDate } from './SelectedDateContext'; 
+import DateSelector from './DateSelector'; 
+import './App.css'; 
 import Title from "./Title";
 import { useUser } from './UserContext';
 
@@ -28,7 +28,6 @@ function App() {
     let isEffectActive = true;
   
     const fetchImages = async () => {
-      // Immediately clear the images for the new date selection
       setImages(prevImages => {
         if (prevImages.length > 0) {
           return [];

@@ -1,5 +1,5 @@
 /*
-Overall Bird Trend Tab construction
+Top Level Bird Trend Tab construction
 */
 
 import React, { useState, useEffect } from 'react';

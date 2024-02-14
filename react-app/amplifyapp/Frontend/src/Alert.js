@@ -1,5 +1,5 @@
 /*
-Construct Food Alert Text
+Page to Construct Food Alert Text
 */
 
 import React from "react";

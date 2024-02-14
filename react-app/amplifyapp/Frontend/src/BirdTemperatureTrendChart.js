@@ -1,5 +1,5 @@
 /*
-Create Bird Temperature Trend Chart 
+Create Bird Temperature Trend Chart against number of detections
 */
 
 import React, { useState, useEffect } from 'react';
