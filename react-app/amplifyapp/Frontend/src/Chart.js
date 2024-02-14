@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { BarChart, XAxis, YAxis, Tooltip, axisClasses } from '@mui/x-charts'; 
 import Title from './Title';
-import { useSelectedDate } from './SelectedDateContext'; // Import the context hook
+import { useSelectedDate } from './SelectedDateContext'; 
 import { useUser } from './UserContext';
 
 function createData(time, count) {
@@ -24,7 +24,7 @@ export default function Chart() {
     ? new Date(selectedDate).toISOString().split('T')[0] 
     : new Date().toISOString().split('T')[0];
   const theme = useTheme();
-  const [data, setData] = useState([]); // Ensure data is initialized to an empty array
+  const [data, setData] = useState([]); 
   const { userDetails, setUserDetails } = useUser();
   const { userId, serial_number} = userDetails
 
@@ -46,14 +46,13 @@ export default function Chart() {
       }
     };
     fetchData();
-  }, [selectedDate]); // Include selectedDate in the dependency array
+  }, [selectedDate]); 
   
 
   // Calculate the maximum count for dynamic Y-axis scaling
   const maxYValue = data.reduce((max, item) => item.count > max ? item.count : max, 0);
 
 
-  // Conditional rendering: Render chart only if data is available
   if (data.length === 0) {
     return <div>Loading...</div>;
   }

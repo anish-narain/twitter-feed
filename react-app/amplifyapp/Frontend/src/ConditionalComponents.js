@@ -1,3 +1,9 @@
+/*
+This conditionally renders a dashboard with charts, visit statistics, and bird history, 
+except on the Bird Trends and Food Alerts pages.
+*/
+
+
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
