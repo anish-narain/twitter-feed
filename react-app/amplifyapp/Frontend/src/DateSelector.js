@@ -1,5 +1,5 @@
 /*
-DateSelector UI for selecting date
+DateSelector UI for selecting date from calandar
 */
 
 import React from 'react';
