@@ -1,4 +1,7 @@
-// BirdSelector.js
+/*
+Fetch bird labels from database
+*/
+
 import React, { useState, useEffect } from 'react';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';

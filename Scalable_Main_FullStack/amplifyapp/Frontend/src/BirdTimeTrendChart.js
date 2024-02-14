@@ -1,3 +1,8 @@
+/*
+Create Bird Time Tread Chart
+Morning, Afternoon, Evening
+*/
+
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { BarChart, XAxis, YAxis, Tooltip, Bar, ResponsiveContainer, Cell } from 'recharts';

@@ -1,4 +1,7 @@
-// SelectedDateContext.js
+/*
+Context Provider for selected date, share date across different .js file
+*/
+
 import React, { createContext, useContext, useState } from 'react';
 
 const SelectedDateContext = createContext();

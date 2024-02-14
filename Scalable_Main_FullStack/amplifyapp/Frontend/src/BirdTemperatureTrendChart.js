@@ -1,3 +1,7 @@
+/*
+Create Bird Temperature Trend Chart 
+*/
+
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { BarChart, XAxis, YAxis, Tooltip, Bar, ResponsiveContainer } from 'recharts';

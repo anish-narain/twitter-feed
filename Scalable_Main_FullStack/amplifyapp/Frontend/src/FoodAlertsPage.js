@@ -1,3 +1,10 @@
+/*
+Food Alert Tab:
+1. Show food weight chart across a selected date
+2. Give the last weight data
+3. Show Alert Message
+*/
+
 import React, { useState, useEffect } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";

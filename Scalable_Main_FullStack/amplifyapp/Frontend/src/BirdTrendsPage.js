@@ -1,3 +1,7 @@
+/*
+Overall Bird Trend Tab construction
+*/
+
 import React, { useState, useEffect } from 'react';
 import BirdSelector from './BirdSelector'; // Adjust the import path as needed
 import BirdTimeTrendChart from './BirdTimeTrendChart';

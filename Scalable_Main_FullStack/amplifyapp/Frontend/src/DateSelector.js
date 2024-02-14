@@ -1,3 +1,7 @@
+/*
+DateSelector UI for selecting date
+*/
+
 import React from 'react';
 
 const DateSelector = ({ onSelectDate }) => {

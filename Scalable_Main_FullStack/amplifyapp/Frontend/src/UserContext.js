@@ -1,4 +1,8 @@
-// UserContext.js
+/*
+Context Provider for userDetails/Serial_number
+Share date across different .js file
+*/
+
 import React, { createContext, useContext, useState } from 'react';
 
 const UserContext = createContext();

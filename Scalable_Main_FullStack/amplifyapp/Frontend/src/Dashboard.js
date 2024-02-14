@@ -1,3 +1,11 @@
+/*
+Main Dashboard Page:
+1. Show for bird detection chart across 3 hour ranges
+2. Show all bird images with predicted labels within selected date
+3. Main page and handle connect and log out
+4. Manage to send userId and Serial number from AWS amplify authenticator to database
+*/
+
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import "@aws-amplify/ui-react/styles.css";

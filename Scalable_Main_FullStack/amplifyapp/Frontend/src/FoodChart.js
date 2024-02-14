@@ -1,3 +1,7 @@
+/*
+Create a food weight chart of food weight against time for a given date
+*/
+
 import React, { useState, useEffect } from "react";
 import { useUser } from './UserContext';
 import {

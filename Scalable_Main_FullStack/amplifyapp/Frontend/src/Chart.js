@@ -1,3 +1,8 @@
+/*
+Create bird detection chart in the Dashboard Tab 
+with bird detection count in every 3 hour range
+*/
+
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { useTheme } from '@mui/material/styles';

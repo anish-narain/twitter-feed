@@ -1,3 +1,9 @@
+/*
+Use to fetch all bird images taken at a specific date
+and show all images in Dashboard Tab
+*/
+
+
 import React, { useState, useEffect } from 'react';
 import "@aws-amplify/ui-react/styles.css";
 import { withAuthenticator, View, Card } from "@aws-amplify/ui-react";
