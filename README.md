@@ -6,9 +6,9 @@ Twitter Feed is an `IOT device` using sensors, `AWS`, `Node.js` and `React`. Twi
 The promotional website for the product can be found [here](https://riyachard.wixsite.com/twitterfeed)
 
 ## Running the code:
-server code: run `inference_server_code_queue.py` on ec2 instance with `bird_model_copy.py` a must dependency.
-
-client code: `new_fake_upload.py` or `new_actual_upload.py` call the server code to make predictions
+Server code: To run the prediction server which identifies the bird breeds, run `python3 prediction-server.py` on ec2 instance with `bird_model.py` as the dependency in the `bird-recognition-server/server` folder. The main server which interfaces with the DynamoDB table, S3 bucket and React app is in the `main-server` folder. It also runs on an ec2 instance and can be run using `node server.js` 
+Web-app code: 
+Client code: `new_fake_upload.py` or `new_actual_upload.py` call the server code to make predictions
 
 ## Main Server 
 The main server handles requests from client App and filter the Database Table and send back the requested data to client App. For all features, please check the description in file `new_testing_sensor_table.js`.
