@@ -25,6 +25,9 @@ access_secret = "sh4WMN8MbRKmGNE9O8/prTZqzT3W9mq/rxJ7S7bH"  # Replace with your 
 bucket_name = "twitterbirdbucket"  # Replace with your actual bucket name
 region_name = 'us-east-1'
 
+# Bird Feeder Serial Number-----------------------------------------------
+serial_number = 'AA123456'
+
 client_s3 = boto3.client(
     's3',
     aws_access_key_id=access_key,
@@ -126,12 +129,15 @@ def WT_data():
             table.put_item(
                 Item={
                     'UploadDateTimeUnique':current_date_time_unique.isoformat(),
-                    'UploadDate': current_date,
-                    'UploadTimestamp': current_timestamp,
                     'BirdDetect': None,
+                    'Accuracy': None,
+                    'BirdLabel': None,
+                    'serial_number': serial_number,
                     'FoodWeight': weight_food,
                     'Temperature': temperature,
-                    'ImageFileName': None
+                    'ImageFileName': None,
+                    'UploadDate': current_date,
+                    'UploadTimestamp': current_timestamp,
                 }
             )
 
@@ -214,14 +220,18 @@ def read_latest_data():
                     table1.put_item(
                         Item={
                             'UploadDateTimeUnique':random_time_point.isoformat(),
-                            'UploadDate': current_date,
-                            'UploadTimestamp': current_timestamp,
                             'BirdDetect': Decimal(0),
+                            'Accuracy': None,
+                            'BirdLabel': None,
+                            'serial_number': serial_number,
                             'FoodWeight': weight,
                             'Temperature': temperature,
-                            'ImageFileName': image_file_name
+                            'ImageFileName': image_file_name,
+                            'UploadDate': current_date,
+                            'UploadTimestamp': current_timestamp,
                         }
                     )
+
                     print(f"Weights, Temperature, and Imagepath are uploaded to dynamodb {current_timestamp}, {weight}, {image_file_name}")
                     
                     image_url_cur = image_url + "/" + image_file_name
