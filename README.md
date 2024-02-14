@@ -9,7 +9,7 @@ The promotional website for the product can be found [here](https://riyachard.wi
 
 Contains the code running on the Rasberry Pi, there are two files:
 
-### upload`
+### upload
 The Actual Data Upload Pipeline is in a single super loop, with `time` function handling faster and slower procedure. We used a super loop as it had little impact on latency. The bird detection sensor is constantly checking if a bird visists while the food weight and temperature sensor send the data every 5 seconds to the server for monitoring the change in data.
 
 We did try to separate the faster and slower features into two separate threads. However, it seems like the the two weight data sensors are communicating to the same I2C ADC chips, so the data cannot be send in parallel.
@@ -22,7 +22,7 @@ We did try to separate the faster and slower features into two separate threads.
 
 **Temperature Sensor** `tempSensor.py` 
 
-### populating-dynamo-db`
+### populating-dynamo-db
 The Fake Data Upload Pipeline runs in two separate threads. The main thread handles bird detection in real time with weight and temperature data and another thread handles weight and temperature upload every 5 minutes.
 
 The following random generators produce some kind of "fake real" weight and temperature data:
@@ -52,7 +52,6 @@ The server code structured to process the data in a queue and asynchronously run
 
 Good performance on Internet images, becuase the network is trained on those images, with over 95% of accuracy. **Poor performance on actual images taken from the bird feeder. Could retrained a network based on the actual images to improve performance.**
 
->Bird prediction pipeline roughly finished - 01/29/24 
 
 ## Main Server 
 The main server handles requests from client App and filter the Database Table and send back the requested data to client App. For all features, please check the description in file `new_testing_sensor_table.js`.
