@@ -10,9 +10,9 @@ Twitter Feed is an **IOT device** using sensors, **AWS**, **Node.js** and **Reac
 
 ## Website
 
-The promotional website for the product can be found [here](https://riyachard.wixsite.com/twitterfeed)
+The promotional website for the product can be found [here](https://riyachard.wixsite.com/twitterfeed).
 
-[![Marketing Video Link](http://www.youtube.com/watch?v=lOHj0jQQYi0)](http://www.youtube.com/watch?v=lOHj0jQQYi0)
+Here is the [marketing video link](http://www.youtube.com/watch?v=lOHj0jQQYi0).
 
 
 ## Running the Code
