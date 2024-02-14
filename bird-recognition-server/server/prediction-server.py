@@ -6,15 +6,14 @@ from PIL import Image
 from io import BytesIO
 import boto3
 
-# Import your model and prediction function
 from bird_model import predict_image, BirdResnet, ResNet34, get_default_device, to_device
 import torch
 
 app = Flask(__name__)
 
 # DynamoDB setup
-dynamodb = boto3.resource('dynamodb', region_name='us-east-1')  # replace 'us-east-1' with your region
-table = dynamodb.Table('Twitter_Table_New')  # replace with your DynamoDB table name
+dynamodb = boto3.resource('dynamodb', region_name='us-east-1') 
+table = dynamodb.Table('Twitter_Table_New') 
 
 # Initialize a Queue
 task_queue = Queue()
@@ -66,15 +65,12 @@ def worker():
     while True:
         # Get a task from the queue
         image_url, primary_key_value = task_queue.get()
-
-        # Print the approximate number of remaining tasks
         print(f"Starting processing a new request: Remaining tasks in queue: {task_queue.qsize()}")
 
         try:
             # Process the task
             handle_prediction(image_url, primary_key_value)
         finally:
-            # Mark the task as done
             task_queue.task_done()
 
 
@@ -92,7 +88,6 @@ def predict():
 
     # Add the task to the queue
     task_queue.put((image_url, primary_key_value))
-    # Print the approximate number of remaining tasks
     print(f"Recieved a new prediction request: Remaining tasks in queue: {task_queue.qsize()}")
 
     return "Prediction task queued", 202
