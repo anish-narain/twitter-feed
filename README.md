@@ -44,7 +44,7 @@ temperature = round(random.choices([Decimal(current_temperature),
 ```
 
 
-## Bird Recogniztion Server:
+## Bird Recognition Server:
 server code: run `inference_server_code_queue.py` on ec2 instance with `bird_model_copy.py` a must dependency.
 
 client code: `new_fake_upload.py` or `new_actual_upload.py` call the server code to make predictions
