@@ -68,7 +68,7 @@ i2c_bus = smbus2.SMBus(1)
 
 weight1 = weightSensor.ADC(0x48, i2c_bus) # ADC on address 0x48
 weight1.setConfig("100", "001", "0", write=True) # Set voltage range to smallest, i.e. most sensitive. Set to continuous read mode, so need to write new config now.
-weightSensor.calibrateSensors(weight1, 268)
+weightSensor.calibrateSensors(weight1, mass=231, mass2=369)
 
 def send_prediction_request(server_url, image_url, primary_key_value):
     data = {
