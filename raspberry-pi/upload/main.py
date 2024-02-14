@@ -42,15 +42,14 @@ client_s3 = boto3.client(
 )
 
 # AWS DynamoDB setup
-# AWS DynamoDB setup
 dynamodb = boto3.resource('dynamodb', 
     aws_access_key_id=access_key, 
     aws_secret_access_key=access_secret,
     region_name=region_name
 )
 
-table = dynamodb.Table('Twitter_Table_New')  # Replace with your actual DynamoDB table name
-table1 = dynamodb.Table('Twitter_Table_New')  # Replace with your actual DynamoDB table name
+table = dynamodb.Table('Twitter_Table_New') 
+table1 = dynamodb.Table('Twitter_Table_New')
 
 # Directory containing the images
 data_file_folder = os.path.join(os.getcwd(), "images")
@@ -59,15 +58,15 @@ if not os.path.exists(data_file_folder):
     os.makedirs(data_file_folder)
     
 
-# Example usage
-server_url = 'http://18.209.102.29:5000'  # Replace with your server's IP and port
-image_url = 'https://twitterbirdbucket.s3.amazonaws.com'  # Replace with your image URL
+# set url link
+server_url = 'http://18.209.102.29:5000'  
+image_url = 'https://twitterbirdbucket.s3.amazonaws.com'  
 
 # Initialize weight sensor
 i2c_bus = smbus2.SMBus(1)
 
-weight1 = weightSensor.ADC(0x48, i2c_bus) # ADC on address 0x48
-weight1.setConfig("100", "001", "0", write=True) # Set voltage range to smallest, i.e. most sensitive. Set to continuous read mode, so need to write new config now.
+weight1 = weightSensor.ADC(0x48, i2c_bus) 
+weight1.setConfig("100", "001", "0", write=True)
 weightSensor.calibrateSensors(weight1, 268)
 
 def send_prediction_request(server_url, image_url, primary_key_value):
@@ -84,23 +83,19 @@ def send_prediction_request(server_url, image_url, primary_key_value):
         print(f"Error: {response.text}")
 
 def bird_detect_fn():
-    last_update_time = time.time()  # Initialize last update time
+    last_update_time = time.time()  
     
     while True:
-        # Detect bird and take photo
         (w, w_g, bird_detect, capture_time, image_file_name, file_path) = weightSensor.loop(weight1, 100)
         print(bird_detect)
         
-        # Check if bird is detected and photo is taken
         if bird_detect and image_file_name != '':
             try:
                 # Upload image to S3 bucket
                 print(f"Uploading file {image_file_name} ....")
                 client_s3.upload_file(file_path, bucket_name, image_file_name)
                 
-                # Add entry to DynamoDB
-                # Initially always set BirdDetect to 0
-                # Update bird detect in server code after prediction
+                # Get current date time
                 current_date = capture_time.strftime("%Y-%m-%d")
                 current_timestamp = capture_time.strftime('%H:%M:%S')
 
@@ -110,6 +105,7 @@ def bird_detect_fn():
 
                 time.sleep(0.1)
 
+                # Add entry to DynamoDB
                 table1.put_item(
                     Item={
                         'UploadDateTimeUnique': capture_time.isoformat(),
@@ -147,13 +143,12 @@ def bird_detect_fn():
                 temperature = tempSensor.readTemp(i2c_bus)
                 time.sleep(0.1)
 
-                # Update current data
+                # Get current date time
                 current_date_time_unique = datetime.datetime.now()
                 current_date = current_date_time_unique.strftime("%Y-%m-%d")
                 current_timestamp = current_date_time_unique.strftime('%H:%M:%S')
 
                 # Add entry to DynamoDB
-                # Initially always set BirdDetect to 0
                 table.put_item(
                     Item={
                         'UploadDateTimeUnique': current_date_time_unique.isoformat(),
@@ -170,7 +165,6 @@ def bird_detect_fn():
                 )
                 print(f"Weights and temperature are uploaded to DynamoDB {current_timestamp}, {round(weight_food, 2)}g, {round(temperature, 2)}C")
 
-                # Update last update time
                 last_update_time = current_time
 
             except ClientError as e:
