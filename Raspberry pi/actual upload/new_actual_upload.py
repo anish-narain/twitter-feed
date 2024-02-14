@@ -32,9 +32,6 @@ access_secret = "sh4WMN8MbRKmGNE9O8/prTZqzT3W9mq/rxJ7S7bH"  # Replace with your 
 bucket_name = "twitterbirdbucket"  # Replace with your actual bucket name
 region_name = 'us-east-1'
 
-# Bird Feeder Serial Number-----------------------------------------------
-serial_number = 'AA123456'
-
 client_s3 = boto3.client(
     's3',
     aws_access_key_id=access_key,
@@ -88,7 +85,7 @@ def bird_detect_fn():
     
     while True:
         # Detect bird and take photo
-        (w, w_g, bird_detect, capture_time, image_file_name, file_path) = weightSensor.loop(weight1, 100)
+        (w, w_g, bird_detect, capture_time, image_file_name, file_path) = weightSensor.loop(weight1, 80)
         print(bird_detect)
         
         # Check if bird is detected and photo is taken
@@ -113,15 +110,12 @@ def bird_detect_fn():
                 table1.put_item(
                     Item={
                         'UploadDateTimeUnique': capture_time.isoformat(),
-                        'BirdDetect': Decimal(1),
-                        'Accuracy': None,
-                        'BirdLabel': None,
-                        'serial_number': serial_number,
-                        'FoodWeight': round(Decimal(weight_food), 2),
-                        'Temperature': round(Decimal(temperature), 2),
-                        'ImageFileName': quote(image_file_name),
                         'UploadDate': current_date,
                         'UploadTimestamp': current_timestamp,
+                        'BirdDetect': Decimal(1),
+                        'FoodWeight': round(Decimal(weight_food), 2),
+                        'Temperature': round(Decimal(temperature), 2),
+                        'ImageFileName': quote(image_file_name)
                     }
                 )
                 print(f"Weights, Temperature, and Imagepath are uploaded to DynamoDB {current_timestamp}, {round(weight_food, 2)}g, {round(temperature, 2)}C, {image_file_name}")
@@ -141,7 +135,9 @@ def bird_detect_fn():
         if current_time - last_update_time >= 5:
             try:
                 # Get weight and temperature
-                weight_food = weightSensor.measure2_g(weight1)
+                weight_food = weightSensor.measure2_g(weight1) - 369
+                if w_g > 50:
+                    weight_food -= w_g
                 temperature = tempSensor.readTemp(i2c_bus)
                 time.sleep(0.1)
 
@@ -155,15 +151,12 @@ def bird_detect_fn():
                 table.put_item(
                     Item={
                         'UploadDateTimeUnique': current_date_time_unique.isoformat(),
-                        'BirdDetect': None,
-                        'Accuracy': None,
-                        'BirdLabel': None,
-                        'serial_number': serial_number,
-                        'FoodWeight': round(Decimal(weight_food), 2),
-                        'Temperature': round(Decimal(temperature), 2),
-                        'ImageFileName': None,
                         'UploadDate': current_date,
                         'UploadTimestamp': current_timestamp,
+                        'BirdDetect': None,
+                        'FoodWeight': round(Decimal(weight_food), 2),
+                        'Temperature': round(Decimal(temperature), 2),
+                        'ImageFileName': None
                     }
                 )
                 print(f"Weights and temperature are uploaded to DynamoDB {current_timestamp}, {round(weight_food, 2)}g, {round(temperature, 2)}C")
