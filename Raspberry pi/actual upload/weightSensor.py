@@ -138,8 +138,6 @@ lastSamples = [] # List of previous n weight samples
 lastDetect = 0 # Time of last detection
 samples = 25 # No of samples to take per reading
 
-
-
 def loop(sensorObject, threshold): # Constantly check sensor to see if a bird has landed, and take a photo if it has. Threshold = increase in weight required to detect bird (ADC value, not in grams).
     global lastSamples, lastDetect, samples, cal_sensor1_0, cal_sensor1_weight
     
