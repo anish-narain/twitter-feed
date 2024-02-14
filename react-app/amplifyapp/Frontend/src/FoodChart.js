@@ -45,7 +45,6 @@ export default function FoodChart({ selectedDate }) {
           // Handle the case where there is no data for today
           setChartData([]);
         } else {
-          // Filter out consecutive points with the same weight
           const filteredData = data.reduce((acc, current, index, array) => {
             // Always include the first data point
             if (index === 0) {
@@ -137,7 +136,6 @@ export default function FoodChart({ selectedDate }) {
           />
           <Legend
             wrapperStyle={{
-              // Adjust these values to move the legend to your desired location
               top: -6,
               left: 75,
               transform: "translate(0, -40)",

@@ -24,7 +24,6 @@ const defaultTheme = createTheme({
   typography: {
     fontFamily: "'Lilita One', cursive",
   },
-  // ... other theme settings
 });
 
 function Dashboard({ signOut }) {
@@ -35,10 +34,9 @@ function Dashboard({ signOut }) {
   );
 
   const { userDetails, setUserDetails } = useUser();
-  const { userId, serial_number} = userDetails
+  const { userId, serial_number } = userDetails
 
   useEffect(() => {
-    // Fetch the latest weight data from the server
     const fetchLatestWeightData = async () => {
       try {
         const response = await fetch(`http://localhost:5001/weight-today/${serial_number}`);
@@ -57,10 +55,6 @@ function Dashboard({ signOut }) {
     };
 
     fetchLatestWeightData();
-
-    // Depending on how often we want to fetch the latest data below is an interval to fetch every minute
-    // const interval = setInterval(fetchLatestWeightData, 60000);
-    // return () => clearInterval(interval);
   }, [selectedDate]);
 
   return (
@@ -68,19 +62,15 @@ function Dashboard({ signOut }) {
       <CssBaseline />
       <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-          {/*<Typography variant="h4" gutterBottom>
-            Food Alerts
-  </Typography>*/}
           <Grid container spacing={3}>
             {/* Food Chart on the left */}
             <Grid item xs={12} md={8} lg={9}>
               <Card>
                 <CardContent>
-                  {/* Place the date selector here */}
+                  {/* Date selector*/}
                   <WeightDateSelector onSelectDate={setSelectedDate} />
                   <div style={{ height: "300px", marginTop: "20px" }}>
                     {" "}
-                    {/* Adjust height as needed */}
                     <FoodChart
                       latestWeight={latestWeight}
                       selectedDate={selectedDate}
@@ -89,7 +79,6 @@ function Dashboard({ signOut }) {
                 </CardContent>
               </Card>
             </Grid>
-            {/* Alerts on the right */}
             <Grid
               item
               xs={12}
@@ -99,7 +88,7 @@ function Dashboard({ signOut }) {
               direction="column"
               spacing={2}
             >
-              {/* Latest Weight alert */}
+              {/* Latest Weight*/}
               <Grid item>
                 <Card>
                   <CardContent>

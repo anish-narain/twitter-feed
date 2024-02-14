@@ -1,3 +1,7 @@
+/*
+A Date Selector for Food Alert Page
+*/
+
 import React from 'react';
 
 const WeightDateSelector = ({ onSelectDate }) => {
