@@ -1,17 +1,17 @@
-# twitter feed
-The following paragraphs introduce the whole software side of our pipeline
+# Twitter Feed
+Twitter Feed is an `IOT device` using sensors, `AWS`, `Node.js` and `React`. Twitter Feed is a smart bird feeder that can `seamlessly detect the presence of birds using a dedicated weight sensor`, and simultaneously `take a picture that can be stored in an interactive web app`. Additionally, Twitter Feed can `predict the breed of bird` from the picture to various degrees of accuary using a trained ML model and present data from previous days in a dynamic graphs. Twitter Feed also `tracks the weight of your bird feed` at 5 second intervals and alerts you when food is below 50g. Twitter Feed keeps a `history of the time of day and temperature (using a temperature sensor) of when each breed is detected`, so you can have the best chance of seeing the bird in person. Finally, Twitter Feed uses a secure `AWS authentification system` where each user logs in with a unique username and password (with secure communication using AWS secret keys). `Multiple users` can be registered on one Twitter Feeder, and a `single user can access multiple feeders` in different locations by entering the Bird Feeder Serial ID when accessing the webapp, allowing for scalability. 
 
-## Raspberry Pi
+## Website
+
+The promotional website for the product can be found [here](https://riyachard.wixsite.com/twitterfeed)
 
 ### Sensors:
 
 **Camera**
 * A baseline for uploading random jpg image to S3 bucket (image storage AWS database) is estalished
-* A dynamodb database for storing time of upload(time of detection of birds) and file name is established
+* We established, a dynamodb database for storing time of upload(time of detection of birds) and file name
 * A proper way of extracting the dynamodb information to node.js is created, with a proper image url and timestamp
 * A rough display is made in react to display the images according to timestamp order
-
->A rough pipeline made - 01/21/24 (tired)
 
 **Weight Sensor** `weightSensor.py`   
 * Two weight sensors: food weight and bird detection
@@ -23,7 +23,7 @@ The following paragraphs introduce the whole software side of our pipeline
 There are two data upload file, actual and fake:
 
 **Actual Data Upload** `new_actual_upload.py`
-The Actual Data Upload Pipeline is in a single super loop, with `time` function handling faster and slower procedure. The bird detection sensor is constantly checking if a bird visists while the food weight and temperature sensor send the data every 5 seconds to the server for monitoring the change in data.
+The Actual Data Upload Pipeline is in a single super loop, with `time` function handling faster and slower procedure. We used a super loop as it had little impact on latency. The bird detection sensor is constantly checking if a bird visists while the food weight and temperature sensor send the data every 5 seconds to the server for monitoring the change in data.
 
 We did try to separate the faster and slower features into two separate threads. However, it seems like the the two weight data sensors are communicating to the same I2C ADC chips, so the data cannot be send in parallel.
 
