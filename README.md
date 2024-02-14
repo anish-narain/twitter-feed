@@ -1,6 +1,9 @@
+<img width="250" alt="image" src="https://github.com/anish-narain/twitter-feed/assets/69715492/ae4c6892-212c-4b61-b6ec-3f0d78a7c95f">
+
 # Twitter Feed
 Twitter Feed is an **IOT device** using sensors, **AWS**, **Node.js** and **React**. Twitter Feed is a smart bird feeder that can **seamlessly detect the presence of birds using a dedicated weight sensor**, and simultaneously **take a picture that can be stored in an interactive web app**. 
-* Twitter Feed can **predict the breed of bird** from the picture to various degrees of accuracy using a trained ML model and present data from previous days in dynamic graphs. * Twitter Feed also **tracks the weight of your bird feed** at 5-second intervals and alerts you when food is below 50g.
+* Twitter Feed can **predict the breed of bird** from the picture to various degrees of accuracy using a trained ML model and present data from previous days in dynamic graphs.
+* Twitter Feed also **tracks the weight of your bird feed** at 5-second intervals and alerts you when food is below 50g.
 * Twitter Feed keeps a **history of the time of day and temperature (using a temperature sensor) of when each breed is detected**, so you can have the best chance of seeing the bird in person.
 * Twitter Feed uses a secure **AWS authentication system** where each user logs in with a unique username and password (with secure communication using AWS secret keys). **Multiple users** can be registered on one Twitter Feeder, and a **single user can access multiple feeders** in different locations by entering the Bird Feeder Serial ID when accessing the web app, allowing for scalability.
 
@@ -9,12 +12,12 @@ Twitter Feed is an **IOT device** using sensors, **AWS**, **Node.js** and **Reac
 
 The promotional website for the product can be found [here](https://riyachard.wixsite.com/twitterfeed)
 
-## Running the code:
+## Running the Code
 Server code: To run the prediction server which identifies the bird breeds, run `python3 prediction-server.py` on ec2 instance with `bird_model.py` as the dependency in the `bird-recognition-server/server` folder. The main server which interfaces with the DynamoDB table, S3 bucket and React app is in the `main-server` folder. It also runs on an ec2 instance and can be run using `node server.js` 
 
-Web-app code: 
+Web-app code: To run the React application, go into the `react-app/amplifyapp/Frontend/src` folder and run `npm start`.
 
-Client code: `new_fake_upload.py` or `new_actual_upload.py` call the server code to make predictions 
+Client code: In `raspberry-pi`, go into `populating-dynamo-db` and run `python3 fake-upload.py` to populate the DynamoDB table systematically with data that can be used for bird trends and historical information. The `main.py` raspberry pi code used in the demo can be found in `raspberry-pi/demo`
 
 ## Main Server 
 The main server handles requests from client App and filter the Database Table and send back the requested data to client App. For all features, please check the description in file `new_testing_sensor_table.js`.
@@ -48,7 +51,6 @@ weight_food = round(random.choices([Decimal(current_weight),
                     Decimal(max(50.0, random.uniform(current_weight-20, current_weight)))],
                     weights=[0.05, 0.95])[0], 1)
             
-        
 
 temperature = round(random.choices([Decimal(current_temperature), 
                     Decimal(min(10.5, max(7.1, random.uniform(current_temperature-0.5, current_temperature+0.5))))],
@@ -61,13 +63,10 @@ The server code structured to process the data in a queue and asynchronously run
 Good performance on Internet images, becuase the network is trained on those images, with over 95% of accuracy. **Poor performance on actual images taken from the bird feeder. Could retrained a network based on the actual images to improve performance.**
 
 ## AWS Database
-1. Twitter_Table_New: stores all data
+1. Twitter_Table_New: stores all the data
 
-![alt text](image.png)
+2. Twitter_User_Table: binds user_id and bird_feeder's serial number
 
 
-2. Twitter_User_Table: bind user_id and bird_feeder's serial number
 
-#
 
-![alt text](image-1.png)
