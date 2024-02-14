@@ -5,6 +5,17 @@ Twitter Feed is an `IOT device` using sensors, `AWS`, `Node.js` and `React`. Twi
 
 The promotional website for the product can be found [here](https://riyachard.wixsite.com/twitterfeed)
 
+## Running the code:
+server code: run `inference_server_code_queue.py` on ec2 instance with `bird_model_copy.py` a must dependency.
+
+client code: `new_fake_upload.py` or `new_actual_upload.py` call the server code to make predictions
+
+## Main Server 
+The main server handles requests from client App and filter the Database Table and send back the requested data to client App. For all features, please check the description in file `new_testing_sensor_table.js`.
+
+## React App Frontend
+We use React for constructing our WebApp and AWS Amplify for handling user authentication procedure. For all features, please check the description in files in folder `Scalable_Main_FullStack\amplifyapp\Frontend`.
+
 ## Rasberry Pi:
 
 Contains the code running on the Rasberry Pi, there are two files:
@@ -37,29 +48,13 @@ temperature = round(random.choices([Decimal(current_temperature),
                     Decimal(min(10.5, max(7.1, random.uniform(current_temperature-0.5, current_temperature+0.5))))],
                     weights=[0.6, 0.4])[0], 1)
 ```
-
-
-## Bird Recognition Server:
-server code: run `inference_server_code_queue.py` on ec2 instance with `bird_model_copy.py` a must dependency.
-
-client code: `new_fake_upload.py` or `new_actual_upload.py` call the server code to make predictions
-
-Bird detection based on inference on Resnet model created by: https://github.com/Moddy2024/Bird-Classification/tree/main
-
 We tried to run prediction locally on raspberry pi after detecting a bird and send the whole package to the database. However, the ML network is so large that the inference time for a single picture on raspberry pi takes more than 15 minutes. Thus, we used a separate server for bird detection which takes around 40 seconds to make a single prediction.
 
 The server code structured to process the data in a queue and asynchronously running on the server so that it doesn't cause the upload procedure to wait until prediction finishes.
 
 Good performance on Internet images, becuase the network is trained on those images, with over 95% of accuracy. **Poor performance on actual images taken from the bird feeder. Could retrained a network based on the actual images to improve performance.**
 
-
-## Main Server 
-The main server handles requests from client App and filter the Database Table and send back the requested data to client App. For all features, please check the description in file `new_testing_sensor_table.js`.
-
-## React App Frontend
-We use React for constructing our WebApp and AWS Amplify for handling user authentication procedure. For all features, please check the description in files in folder `Scalable_Main_FullStack\amplifyapp\Frontend`.
-
-## Database
+## AWS Database
 1. Twitter_Table_New: stores all data
 
 ![alt text](image.png)
