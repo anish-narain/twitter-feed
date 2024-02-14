@@ -192,7 +192,7 @@ if __name__ == "__main__":
     weight1 = ADC(0x48, i2c_bus)
     weight1.setConfig("100", "001", "0", write=True) # Set voltage range to smallest, i.e. most sensitive. No need to write new config as it will be done when reading ADC.
 
-    calibrateSensors(weight1, 231)
+    calibrateSensors(weight1, mass=100, mass2=369)
     while True:
-        d = loop(weight1, 200)
+        d = loop(weight1, 50)
         print(d[0], d[1], measure2_g(weight1))
