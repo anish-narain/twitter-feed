@@ -20,9 +20,9 @@ import copy
 
 
 # AWS S3 setup
-access_key = "AKIATO4ZT6IXMKE6KWXZ"  # Replace with your actual access key
-access_secret = "sh4WMN8MbRKmGNE9O8/prTZqzT3W9mq/rxJ7S7bH"  # Replace with your actual secret key
-bucket_name = "twitterbirdbucket"  # Replace with your actual bucket name
+access_key = "AKIATO4ZT6IXMKE6KWXZ" 
+access_secret = "sh4WMN8MbRKmGNE9O8/prTZqzT3W9mq/rxJ7S7bH"  
+bucket_name = "twitterbirdbucket"  
 region_name = 'us-east-1'
 
 # Bird Feeder Serial Number-----------------------------------------------
@@ -35,15 +35,14 @@ client_s3 = boto3.client(
 )
 
 # AWS DynamoDB setup
-# AWS DynamoDB setup
 dynamodb = boto3.resource('dynamodb', 
     aws_access_key_id=access_key, 
     aws_secret_access_key=access_secret,
     region_name=region_name
 )
 
-table = dynamodb.Table('Twitter_Table_New')  # Replace with your actual DynamoDB table name
-table1 = dynamodb.Table('Twitter_Table_New')  # Replace with your actual DynamoDB table name
+table = dynamodb.Table('Twitter_Table_New') 
+table1 = dynamodb.Table('Twitter_Table_New') 
 
 # Directory containing the images
 data_file_folder = os.path.join(os.getcwd(), "images")
@@ -52,11 +51,11 @@ if not os.path.exists(data_file_folder):
     os.makedirs(data_file_folder)
     
 
-# Example usage
-server_url = 'http://18.209.102.29:5000'  # Replace with your server's IP and port
-image_url = 'https://twitterbirdbucket.s3.amazonaws.com'  # Replace with your image URL
 
-# Extend the shared dictionary to include the previous data
+server_url = 'http://18.209.102.29:5000'  
+image_url = 'https://twitterbirdbucket.s3.amazonaws.com'  
+
+
 latest_data = {
     "current": {
         "weight_food": None,
@@ -84,11 +83,12 @@ def send_prediction_request(server_url, image_url, primary_key_value):
         print(f"Error: {response.text}")
 
 bird_detect = 0  # Global variable to hold bird detection status, 0 means no bird detected, 1 means bird detected
+
 # Lock for synchronizing access to the shared data
 data_lock = threading.Lock()
 
 def WT_data():
-    global bird_detect  # Use the global variable
+    global bird_detect 
     weight_food = round(Decimal(200.0),1)
     current_weight = 200.0
     current_temperature = 22.0
@@ -98,7 +98,7 @@ def WT_data():
     increment = datetime.timedelta(minutes=5)
 
     while True:
-        # Update current data
+        # Update current date time
         current_date = current_date_time_unique.strftime("%Y-%m-%d")
         current_timestamp = current_date_time_unique.strftime('%H:%M:%S')
 
@@ -124,8 +124,6 @@ def WT_data():
         
         try:   
             # Add entry to DynamoDB
-            # Initially always set BirdDetect to 0
-            # Update bird detect in sever code after prediction
             table.put_item(
                 Item={
                     'UploadDateTimeUnique':current_date_time_unique.isoformat(),
@@ -150,10 +148,10 @@ def WT_data():
             print(e)
 
         current_date_time_unique += increment
-        time.sleep(0.2)  # Simulate work
+        time.sleep(0.2) 
 
 def read_latest_data():
-    global bird_detect  # Use the global variable
+    global bird_detect 
     images = []
     data_file_folder = os.path.join(os.getcwd(), "images")
     for file in os.listdir(data_file_folder):
@@ -167,7 +165,6 @@ def read_latest_data():
 
         if bird_detect:
             with data_lock:
-                # Safely copy the data for use
                 current_data = copy.deepcopy(latest_data["current"])
                 previous_data = copy.deepcopy(latest_data["previous"])
             '''
@@ -206,17 +203,13 @@ def read_latest_data():
                 time.sleep(0.25)            
                 bird_detect = 0 
 
-                try: 
-                    #stop = False
-                    #time.sleep(3)         
+                try:         
                     # Upload fake images to s3 bucket          
                     file_path = os.path.join(data_file_folder, image_file_name)
                     print(f"Uploading file {image_file_name} ....")
                     client_s3.upload_file(file_path, bucket_name, image_file_name)
                     
                     # Add entry to DynamoDB
-                    # Initially always set BirdDetect to 0
-                    # Update bird detect in sever code after prediction
                     table1.put_item(
                         Item={
                             'UploadDateTimeUnique':random_time_point.isoformat(),
@@ -249,7 +242,7 @@ def read_latest_data():
                 print(f"Random Temperature: {temperature}")
                 print(f"Random Time: {random_time_point}")       
 
-        time.sleep(0.8)  # Simulate processing time
+        time.sleep(0.8)  
 
 # Start threads
 producer_thread = threading.Thread(target=WT_data)
@@ -258,6 +251,3 @@ producer_thread.start()
 time.sleep(5)
 read_latest_data()
 
-# Join threads to ensure cleanup (assuming you have a mechanism to exit the loops)
-# producer_thread.join()
-# consumer_thread.join() or signal it to stop based on your application logic
