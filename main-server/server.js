@@ -296,38 +296,63 @@ const getCurrentDate = () => {
 //------------------------------------------------------------------------------
 // Retrieve and send the weight data for the current date for a given serial number
 app.get("/weight-today/:serial_number", async (req, res) => {
-  //const today = "2024-01-04";  // Use a fixed date for demonstration
-  const { serial_number} = req.params;
-  const today = getCurrentDate();  
+  const { serial_number } = req.params;
+  const today = getCurrentDate(); // Assuming this returns 'YYYY-MM-DD'
 
   const params = {
     TableName: tableName,
-    FilterExpression: "contains(UploadDateTimeUnique, :date) AND serial_number = :serial_number",
+    FilterExpression: "serial_number = :serial_number AND attribute_exists(FoodWeight)",
     ExpressionAttributeValues: {
-      ":date": today,
       ":serial_number": serial_number,
     },
   };
 
   try {
     const data = await dynamodb.scan(params).promise();
-    const weightData = data.Items
-      .map((item) => ({
-        time: new Date(item.UploadDateTimeUnique).getTime(),
-        amount: item.FoodWeight,
-      }))
-      .filter((item) => item.amount) 
-      .sort((a, b) => a.time - b.time); 
+    let closestDate = null;
+    let smallestDiff = Number.MAX_SAFE_INTEGER;
 
-    // Send the sorted data
-    res.json(weightData);
-    console.log(weightData);
-    console.log(`WEIGHT DATA SENT FOR TODAY: ${today}`);
+    // First, find the closest date
+    data.Items.forEach(item => {
+      if (item.UploadDate && item.FoodWeight) {
+        const itemDate = new Date(item.UploadDate);
+        const todayDate = new Date(today);
+        const diff = Math.abs(todayDate - itemDate);
+
+        if (diff < smallestDiff) {
+          smallestDiff = diff;
+          closestDate = item.UploadDate;
+        }
+      }
+    });
+
+    if (closestDate) {
+      // Filter items by the closest date and sort them by time
+      const closestDateItems = data.Items.filter(item => item.UploadDate === closestDate)
+        .sort((a, b) => {
+          const timeA = a.UploadDateTimeUnique ? new Date(a.UploadDateTimeUnique).getTime() : 0;
+          const timeB = b.UploadDateTimeUnique ? new Date(b.UploadDateTimeUnique).getTime() : 0;
+          return timeA - timeB;
+        });
+
+      // Map to the desired format
+      const sortedWeightData = closestDateItems.map(item => ({
+        time: item.UploadDateTimeUnique ? new Date(item.UploadDateTimeUnique).toISOString() : 'Unknown time',
+        amount: item.FoodWeight,
+        date: item.UploadDate
+      }));
+
+      res.json(sortedWeightData);
+      console.log(`WEIGHT DATA SENT FOR CLOSEST DATE: ${closestDate}`);
+    } else {
+      res.status(404).send("No weight data found near the specified date.");
+    }
   } catch (error) {
     console.error("DynamoDB error:", error);
     res.status(500).send(error.toString());
   }
 });
+
 
 //------------------------------------------------------------------------------------------------------------
 // Retrieve and send the weight data for a specified date and serial number
