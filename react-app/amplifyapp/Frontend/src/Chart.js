@@ -31,7 +31,7 @@ export default function Chart() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:5001/bird_detections_chart/${serial_number}/${QueryDate}`);
+        const response = await fetch(`http://ec2-3-85-198-193.compute-1.amazonaws.com:5001/bird_detections_chart/${serial_number}/${QueryDate}`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }

@@ -39,7 +39,7 @@ function Dashboard({ signOut }) {
   useEffect(() => {
     const fetchLatestWeightData = async () => {
       try {
-        const response = await fetch(`http://localhost:5001/weight-today/${serial_number}`);
+        const response = await fetch(`http://ec2-3-85-198-193.compute-1.amazonaws.com:5001/weight-today/${serial_number}`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }

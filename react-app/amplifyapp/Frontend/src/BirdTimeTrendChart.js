@@ -20,7 +20,7 @@ function BirdTimeTrendChart({ selectedBird, onMaxTimeOfDay }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:5001/bird_time_trend/${serial_number}/${selectedBird}`);
+        const response = await fetch(`http://ec2-3-85-198-193.compute-1.amazonaws.com:5001/bird_time_trend/${serial_number}/${selectedBird}`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }

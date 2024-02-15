@@ -25,7 +25,7 @@ export default function Visits() {
     // Fetch the count for QueryDate
     async function fetchCount() {
       try {
-        const response = await fetch(`http://localhost:5001/bird_detect_single_date/${serial_number}/${QueryDate}`);
+        const response = await fetch(`http://ec2-3-85-198-193.compute-1.amazonaws.com:5001/bird_detect_single_date/${serial_number}/${QueryDate}`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }

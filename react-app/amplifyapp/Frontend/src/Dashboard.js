@@ -154,7 +154,7 @@ function Dashboard() {
       };
       setUserDetails(userDetails)
 
-      await fetch('http://localhost:5001/user-details', {
+      await fetch('http://ec2-3-85-198-193.compute-1.amazonaws.com:5001/user-details', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -188,7 +188,7 @@ function Dashboard() {
           setUserDetails(userDetails)
 
           // Send the userID, serial_number to the server
-          await fetch('http://localhost:5001/user-details', {
+          await fetch('http://ec2-3-85-198-193.compute-1.amazonaws.com:5001/user-details', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

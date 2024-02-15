@@ -36,7 +36,7 @@ export default function FoodChart({ selectedDate }) {
   useEffect(() => {
     const fetchWeightData = async () => {
       try {
-        const response = await fetch(`http://localhost:5001/weight-on-date/${serial_number}/${selectedDate}`);
+        const response = await fetch(`http://ec2-3-85-198-193.compute-1.amazonaws.com:5001/weight-on-date/${serial_number}/${selectedDate}`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }

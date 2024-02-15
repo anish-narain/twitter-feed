@@ -15,7 +15,7 @@ function BirdSelector({ onSelectBird  }) {
 
   useEffect(() => {
     // Fetch bird labels from your backend
-    fetch(`http://localhost:5001/unique-bird-labels/${serial_number}`)
+    fetch(`http://ec2-3-85-198-193.compute-1.amazonaws.com:5001/unique-bird-labels/${serial_number}`)
       .then(response => response.json())
       .then(data => {
         setBirdLabels(data); 
