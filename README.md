@@ -26,13 +26,12 @@ Client code: In `raspberry-pi`, go into `populating-dynamo-db` and run `python3 
 
 | Folder | File | Description |
 |----------|----------|----------|
-| bird-recognition-server | bird_images | Row 1, Column 3 |
-| bird-recognition-server | local | Row 2, Column 3 |
-| bird-recognition-server | server | Row 3, Column 3 |
-| main-server | bird_images | Row 1, Column 3 |
-| raspberry-pi | demo | Row 2, Column 3 |
-| raspberry-pi | server | Row 3, Column 3 |
-| react-app/amplifyapp | Frontend | Row 3, Column 3 |
+| bird-recognition-server | bird_images | These are test images for testing the bird prediction |
+| bird-recognition-server | local | Contains the pretrained bird identification model. This folder has code for testing the bird prediction on our local devices. |
+| bird-recognition-server | server | Also contains the pretrained bird identification model. This folder has the code that was run on our bird prediction AWS server.|
+| main-server | bird_images | Contains the code for the AWS server which fetches data from our DynamoDB table and interfaces with our react application. |
+| react-app/amplifyapp | Frontend | Contains our React App code with AWS Amplify for authentication. |
+| raspberry-pi | README.md | Contains the descriptions of the files in this folder. |
 
 The main server handles requests from client App and filter the Database Table and send back the requested data to client App. For all features, please check the description in file `new_testing_sensor_table.js`.
 
