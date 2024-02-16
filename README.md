@@ -22,11 +22,28 @@ Web-app code: To run the React application, go into the `react-app/amplifyapp/Fr
 
 Client code: In `raspberry-pi`, go into `populating-dynamo-db` and run `python3 fake-upload.py` to populate the DynamoDB table systematically with data that can be used for bird trends and historical information. The `main.py` raspberry pi code used in the demo can be found in `raspberry-pi/demo`
 
-## Main Server 
+## Contents of Our Folders
+
+| Folder | File | Description |
+|----------|----------|----------|
+| bird-recognition-server | bird_images | Row 1, Column 3 |
+| bird-recognition-server | local | Row 2, Column 3 |
+| bird-recognition-server | server | Row 3, Column 3 |
+| main-server | bird_images | Row 1, Column 3 |
+| raspberry-pi | demo | Row 2, Column 3 |
+| raspberry-pi | server | Row 3, Column 3 |
+| react-app/amplifyapp | Frontend | Row 3, Column 3 |
+
 The main server handles requests from client App and filter the Database Table and send back the requested data to client App. For all features, please check the description in file `new_testing_sensor_table.js`.
 
 ## React App Frontend
-We use React for constructing our WebApp and AWS Amplify for handling user authentication procedure. For all features, please check the description in files in folder `Scalable_Main_FullStack\amplifyapp\Frontend`.
+Main Dashboard showing birds detected and the breed predictions.
+<img width="900" alt="image" src="https://github.com/anish-narain/twitter-feed/assets/69715492/601bac5d-e75f-4d1c-a3d2-f33ff7e30237">
+
+Identifying trends for different types of birds.
+
+<img width="600" alt="image" src="https://github.com/anish-narain/twitter-feed/assets/69715492/f7269707-8cae-46fa-bdb4-a6cfbc82abc7">
+
 
 ## Rasberry Pi:
 
