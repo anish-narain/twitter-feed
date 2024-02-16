@@ -2,12 +2,11 @@
 
 Contains the code running on the Rasberry Pi, there are two files:
 
-### upload
+### demo
+**Main** `main.py` 
 The Actual Data Upload Pipeline is in a single super loop, with `time` function handling faster and slower procedure. We used a super loop as it had little impact on latency. The bird detection sensor is constantly checking if a bird visists while the food weight and temperature sensor send the data every 5 seconds to the server for monitoring the change in data.
 
 We did try to separate the faster and slower features into two separate threads. However, it seems like the the two weight data sensors are communicating to the same I2C ADC chips, so the data cannot be send in parallel.
-
-**Main** `Main.py` 
 
 **Weight Sensor** `weightSensor.py`   
 * Two weight sensors: food weight and bird detection
