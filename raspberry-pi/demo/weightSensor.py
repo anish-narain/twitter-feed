@@ -70,7 +70,7 @@ class ADC:
 def measure2(sensorObject): # Takes single reading from sensor 2
     sensorObject.setConfig("011", "111", "0", write=True) # Set to measure AN1 - AN2, with max gain.
     w = sensorObject.read()
-    sensorObject.setConfig("100", "001", "0", write=True) # Set back to measure first sensor
+    sensorObject.setConfig("000", "111", "0", write=True) # Set back to measure first sensor
     return w
 
 def measure2_g(sensorObject): # Returns weight reading froms sensor 2 in grams
@@ -85,7 +85,7 @@ def measure2_g(sensorObject): # Returns weight reading froms sensor 2 in grams
 
     w_g = ((total / float(samples)) - cal_sensor2_0) / float(cal_sensor2_weight)
 
-    sensorObject.setConfig("100", "001", "0", write=True) # Set back to measure first sensor
+    sensorObject.setConfig("000", "111", "0", write=True) # Set back to measure first sensor
     return w_g
 
 # calibrate ######################################
@@ -125,7 +125,7 @@ def calibrateSensors(sensorObject, mass, mass2=0): # Calibrates sensors with kno
     cal_40 = total_40 / float(samples)
     cal_sensor2_weight = (cal_40 - cal_sensor2_0) / float(mass2)
 
-    sensorObject.setConfig("100", "001", "0", write=True) # Set to default measurement
+    sensorObject.setConfig("000", "111", "0", write=True) # Set to default measurement
 
     print("Done")
 ##################################################
@@ -159,7 +159,7 @@ def loop(sensorObject, threshold): # Constantly check sensor to see if a bird ha
     detected = False
     if w > last_avg + threshold: # If most recent reading is significantly higher than average of last readings, a bird has landed
         
-        if time.time() - lastDetect > 1: # Won't trigger within 1s of a previous detection
+        if time.time() - lastDetect > 5: # Won't trigger within 1s of a previous detection
             # Directory containing the images
             data_file_folder = os.path.join(os.getcwd(), "images")
 
@@ -190,7 +190,7 @@ def loop(sensorObject, threshold): # Constantly check sensor to see if a bird ha
 if __name__ == "__main__":
     i2c_bus = smbus2.SMBus(1) # Initialise I2C bus
     weight1 = ADC(0x48, i2c_bus)
-    weight1.setConfig("100", "001", "0", write=True) # Set voltage range to smallest, i.e. most sensitive. No need to write new config as it will be done when reading ADC.
+    weight1.setConfig("000", "111", "0", write=True) # Set voltage range to smallest, i.e. most sensitive. No need to write new config as it will be done when reading ADC.
 
     calibrateSensors(weight1, mass=100, mass2=369)
     while True:
