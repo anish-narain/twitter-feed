@@ -33,8 +33,6 @@ Client code: In `raspberry-pi`, go into `populating-dynamo-db` and run `python3 
 | react-app/amplifyapp | Frontend | Contains our React App code with AWS Amplify for authentication. |
 | raspberry-pi | README.md | Contains the descriptions of the files in this folder. |
 
-The main server handles requests from client App and filter the Database Table and send back the requested data to client App. For all features, please check the description in file `new_testing_sensor_table.js`.
-
 ## React App Frontend
 Main Dashboard showing birds detected and the breed predictions.
 <img width="900" alt="image" src="https://github.com/anish-narain/twitter-feed/assets/69715492/601bac5d-e75f-4d1c-a3d2-f33ff7e30237">
