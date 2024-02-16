@@ -190,8 +190,15 @@ def loop(sensorObject, threshold): # Constantly check sensor to see if a bird ha
 if __name__ == "__main__":
     i2c_bus = smbus2.SMBus(1) # Initialise I2C bus
     weight1 = ADC(0x48, i2c_bus)
-    weight1.setConfig("000", "111", "0", write=True) # Set voltage range to smallest, i.e. most sensitive. No need to write new config as it will be done when reading ADC.
 
+    """
+    Config required
+    MUX = 000 -> Measure differential input between pins AIN0 and AIN1
+    Range = 111 -> Smallest range (i.e. most sensitive), measures voltages between 0 and 0.256V
+    Mode = 0 -> Continuous mode, sensor will constantly make readings without needing to send command each time
+    """
+    weight1.setConfig("000", "111", "0", write=True)
+    
     calibrateSensors(weight1, mass=100, mass2=369)
     while True:
         d = loop(weight1, 50)
