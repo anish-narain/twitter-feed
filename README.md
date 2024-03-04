@@ -5,7 +5,10 @@ Twitter Feed is an **IOT device** using sensors, **AWS**, **Node.js** and **Reac
 * Twitter Feed can **predict the breed of bird** from the picture to various degrees of accuracy using a trained ML model and present data from previous days in dynamic graphs.
 * Twitter Feed also **tracks the weight of your bird feed** at 5-second intervals and alerts you when food is below 50g.
 * Twitter Feed keeps a **history of the time of day and temperature (using a temperature sensor) of when each breed is detected**, so you can have the best chance of seeing the bird in person.
-* Twitter Feed uses a secure **AWS authentication system** where each user logs in with a unique username and password (with secure communication using AWS secret keys). **Multiple users** can be registered on one Twitter Feeder, and a **single user can access multiple feeders** in different locations by entering the Bird Feeder Serial ID when accessing the web app, allowing for scalability.
+* Twitter Feed uses a secure **AWS authentication system** where each user logs in with a unique username and password (with secure communication using AWS secret keys). **Multiple users** can be registered on one Twitter Feeder, and a **single user can access multiple feeders** in different locations by entering the Bird Feeder Serial ID when accessing the web app, allowing for scalability. 
+
+
+<img width="700" alt="image" src="https://github.com/anish-narain/twitter-feed/assets/69715492/d8e049e7-1c7d-4c44-ab61-4e8f3622721f">
 
 
 ## Website
